@@ -15,7 +15,7 @@ export function ProposerProposalsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">提案一覧</h1>
+        <h1 className="text-2xl font-bold text-gray-800">マイ提案一覧</h1>
         <Link to="/proposer/proposals/new">
           <ActionButton>新規提案を作成</ActionButton>
         </Link>

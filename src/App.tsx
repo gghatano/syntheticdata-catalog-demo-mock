@@ -20,6 +20,7 @@ import { ProposerProposalsPage } from "./pages/proposer/ProposerProposalsPage";
 import { ProposerProposalFormPage } from "./pages/proposer/ProposerProposalFormPage";
 import { ProposerProposalDetailPage } from "./pages/proposer/ProposerProposalDetailPage";
 import { DataRequestsPage } from "./pages/proposer/DataRequestsPage";
+import { CommunityProposalsPage } from "./pages/proposer/CommunityProposalsPage";
 
 export default function App() {
   return (
@@ -60,6 +61,7 @@ export default function App() {
               <Route path="/proposer/proposals/new" element={<ProposerProposalFormPage />} />
               <Route path="/proposer/proposals/:id" element={<ProposerProposalDetailPage />} />
               <Route path="/proposer/data-requests" element={<DataRequestsPage />} />
+              <Route path="/proposer/community" element={<CommunityProposalsPage />} />
             </Route>
           </Route>
         </Routes>

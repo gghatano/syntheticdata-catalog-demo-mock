@@ -11,7 +11,7 @@ export function HrProposalsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">提案管理</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">提案レビュー</h1>
       <div className="bg-white rounded-lg shadow">
         <DataTable
           columns={[
