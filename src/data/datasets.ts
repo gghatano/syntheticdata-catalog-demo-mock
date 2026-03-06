@@ -1,0 +1,103 @@
+import { Dataset } from "../types/models";
+
+export const DATASETS: Dataset[] = [
+  {
+    dataset_id: "DS0001",
+    name: "従業員スキル分析データ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "従業員のスキル・プロジェクト配置・稼働時間の分析用データセット",
+    tags: ["人事", "スキル", "プロジェクト"],
+    created_at: "2024-06-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0001/employee_master.csv", created_at: "2024-06-01T09:00:00Z" },
+      { file_type: "project_allocation", file_path: "data/DS0001/project_allocation.csv", created_at: "2024-06-01T09:00:00Z" },
+      { file_type: "working_hours", file_path: "data/DS0001/working_hours.csv", created_at: "2024-06-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0001/employee_master_seed42.csv", seed: 42, created_at: "2024-06-15T10:00:00Z" },
+      { file_type: "project_allocation", file_path: "synthetic/DS0001/project_allocation_seed42.csv", seed: 42, created_at: "2024-06-15T10:00:00Z" },
+      { file_type: "working_hours", file_path: "synthetic/DS0001/working_hours_seed42.csv", seed: 42, created_at: "2024-06-15T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.91,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 500, row_count_synthetic: 500, column_correlation: 0.93, distribution_similarity: 0.90, statistical_parity: 0.89 },
+        { file_type: "project_allocation", row_count_original: 1200, row_count_synthetic: 1200, column_correlation: 0.92, distribution_similarity: 0.88, statistical_parity: 0.91 },
+        { file_type: "working_hours", row_count_original: 6000, row_count_synthetic: 6000, column_correlation: 0.94, distribution_similarity: 0.91, statistical_parity: 0.90 },
+      ],
+    },
+    catalog: [
+      { column_name: "emp_id", inferred_type: "string", is_pii: true, pii_reason: "従業員ID", description: "従業員の一意識別子", stats: { count: 500, null_count: 0, unique_count: 500, min: "E001", max: "E500" } },
+      { column_name: "name", inferred_type: "string", is_pii: true, pii_reason: "氏名", description: "従業員氏名", stats: { count: 500, null_count: 0, unique_count: 498 } },
+      { column_name: "department", inferred_type: "string", is_pii: false, pii_reason: null, description: "所属部署", stats: { count: 500, null_count: 0, unique_count: 8 } },
+      { column_name: "join_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "入社日", stats: { count: 500, null_count: 0, unique_count: 120, min: "2015-04-01", max: "2024-04-01" } },
+      { column_name: "grade", inferred_type: "string", is_pii: false, pii_reason: null, description: "等級", stats: { count: 500, null_count: 0, unique_count: 6 } },
+      { column_name: "skill_score", inferred_type: "integer", is_pii: false, pii_reason: null, description: "スキルスコア(0-100)", stats: { count: 500, null_count: 5, unique_count: 85, min: 20, max: 98, mean: 68.3, std: 15.2, histogram: { bins: ["20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100"], counts: [15, 35, 60, 95, 120, 100, 55, 20] } } },
+      { column_name: "project_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "プロジェクトID", stats: { count: 1200, null_count: 0, unique_count: 50 } },
+      { column_name: "role", inferred_type: "string", is_pii: false, pii_reason: null, description: "プロジェクト内の役割", stats: { count: 1200, null_count: 0, unique_count: 5 } },
+      { column_name: "allocation_pct", inferred_type: "integer", is_pii: false, pii_reason: null, description: "アサイン比率(%)", stats: { count: 1200, null_count: 0, unique_count: 10, min: 10, max: 100, mean: 65.4, std: 22.1, histogram: { bins: ["10-20", "20-40", "40-60", "60-80", "80-100"], counts: [50, 150, 300, 400, 300] } } },
+      { column_name: "year_month", inferred_type: "string", is_pii: false, pii_reason: null, description: "年月", stats: { count: 6000, null_count: 0, unique_count: 12 } },
+      { column_name: "regular_hours", inferred_type: "integer", is_pii: false, pii_reason: null, description: "所定労働時間", stats: { count: 6000, null_count: 0, unique_count: 15, min: 140, max: 176, mean: 162.5, std: 8.3, histogram: { bins: ["140-150", "150-160", "160-170", "170-180"], counts: [200, 1500, 3000, 1300] } } },
+      { column_name: "overtime_hours", inferred_type: "float", is_pii: false, pii_reason: null, description: "残業時間", stats: { count: 6000, null_count: 10, unique_count: 60, min: 0, max: 80, mean: 18.7, std: 15.4, histogram: { bins: ["0-10", "10-20", "20-30", "30-40", "40-60", "60-80"], counts: [1800, 1500, 1200, 800, 500, 200] } } },
+    ],
+  },
+  {
+    dataset_id: "DS0002",
+    name: "部門別パフォーマンスデータ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "部門ごとの業績・稼働・離職率の分析用データセット",
+    tags: ["人事", "業績", "離職"],
+    created_at: "2024-07-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0002/employee_master.csv", created_at: "2024-07-01T09:00:00Z" },
+      { file_type: "project_allocation", file_path: "data/DS0002/project_allocation.csv", created_at: "2024-07-01T09:00:00Z" },
+      { file_type: "working_hours", file_path: "data/DS0002/working_hours.csv", created_at: "2024-07-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0002/employee_master_seed42.csv", seed: 42, created_at: "2024-07-15T10:00:00Z" },
+      { file_type: "project_allocation", file_path: "synthetic/DS0002/project_allocation_seed42.csv", seed: 42, created_at: "2024-07-15T10:00:00Z" },
+      { file_type: "working_hours", file_path: "synthetic/DS0002/working_hours_seed42.csv", seed: 42, created_at: "2024-07-15T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.88,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 300, row_count_synthetic: 300, column_correlation: 0.90, distribution_similarity: 0.87, statistical_parity: 0.86 },
+        { file_type: "project_allocation", row_count_original: 800, row_count_synthetic: 800, column_correlation: 0.89, distribution_similarity: 0.85, statistical_parity: 0.88 },
+        { file_type: "working_hours", row_count_original: 3600, row_count_synthetic: 3600, column_correlation: 0.91, distribution_similarity: 0.89, statistical_parity: 0.87 },
+      ],
+    },
+    catalog: [
+      { column_name: "emp_id", inferred_type: "string", is_pii: true, pii_reason: "従業員ID", description: "従業員の一意識別子", stats: { count: 300, null_count: 0, unique_count: 300 } },
+      { column_name: "name", inferred_type: "string", is_pii: true, pii_reason: "氏名", description: "従業員氏名", stats: { count: 300, null_count: 0, unique_count: 300 } },
+      { column_name: "department", inferred_type: "string", is_pii: false, pii_reason: null, description: "所属部署", stats: { count: 300, null_count: 0, unique_count: 6 } },
+      { column_name: "performance_score", inferred_type: "float", is_pii: false, pii_reason: null, description: "業績評価スコア(1.0-5.0)", stats: { count: 300, null_count: 2, unique_count: 40, min: 1.0, max: 5.0, mean: 3.4, std: 0.8, histogram: { bins: ["1.0-2.0", "2.0-3.0", "3.0-4.0", "4.0-5.0"], counts: [20, 80, 130, 70] } } },
+      { column_name: "tenure_years", inferred_type: "integer", is_pii: false, pii_reason: null, description: "勤続年数", stats: { count: 300, null_count: 0, unique_count: 20, min: 1, max: 25, mean: 8.5, std: 5.2 } },
+      { column_name: "is_resigned", inferred_type: "boolean", is_pii: false, pii_reason: null, description: "退職フラグ", stats: { count: 300, null_count: 0, unique_count: 2 } },
+    ],
+  },
+  {
+    dataset_id: "DS0003",
+    name: "新卒採用分析データ",
+    owner_user_id: "hr_demo",
+    is_published: false,
+    description: "新卒採用プロセスの分析用データセット（準備中）",
+    tags: ["人事", "採用", "新卒"],
+    created_at: "2024-08-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0003/employee_master.csv", created_at: "2024-08-01T09:00:00Z" },
+      { file_type: "project_allocation", file_path: "data/DS0003/project_allocation.csv", created_at: "2024-08-01T09:00:00Z" },
+      { file_type: "working_hours", file_path: "data/DS0003/working_hours.csv", created_at: "2024-08-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [],
+    quality_report: null,
+    catalog: [
+      { column_name: "applicant_id", inferred_type: "string", is_pii: true, pii_reason: "応募者ID", description: "応募者の一意識別子", stats: { count: 200, null_count: 0, unique_count: 200 } },
+      { column_name: "university", inferred_type: "string", is_pii: false, pii_reason: null, description: "出身大学", stats: { count: 200, null_count: 0, unique_count: 45 } },
+      { column_name: "gpa", inferred_type: "float", is_pii: false, pii_reason: null, description: "GPA", stats: { count: 200, null_count: 5, unique_count: 30, min: 2.0, max: 4.0, mean: 3.2, std: 0.5 } },
+      { column_name: "interview_score", inferred_type: "integer", is_pii: false, pii_reason: null, description: "面接スコア(1-10)", stats: { count: 200, null_count: 0, unique_count: 10, min: 3, max: 10, mean: 6.8, std: 1.5 } },
+      { column_name: "offer_status", inferred_type: "string", is_pii: false, pii_reason: null, description: "内定状況", stats: { count: 200, null_count: 0, unique_count: 3 } },
+    ],
+  },
+];
