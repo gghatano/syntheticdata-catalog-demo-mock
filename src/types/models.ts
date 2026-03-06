@@ -72,6 +72,54 @@ export interface CatalogColumn {
   stats: ColumnStats;
 }
 
+// --- データカタログ拡張: サンプルテーブル・ユースケース・グラフ ---
+
+export type ColumnDataType = "string" | "integer" | "number" | "date" | "datetime" | "boolean";
+
+export interface SampleColumnDef {
+  name: string;
+  type: ColumnDataType;
+  displayName: string;
+  description?: string;
+  nullable?: boolean;
+  format?: string;
+}
+
+export interface SampleForeignKey {
+  columns: string[];
+  referenceTable: string;
+  referenceColumns: string[];
+}
+
+export interface SampleTable {
+  tableName: string;
+  description: string;
+  columns: SampleColumnDef[];
+  rows: Record<string, unknown>[];
+  primaryKey: string[];
+  foreignKeys: SampleForeignKey[];
+}
+
+export interface DatasetUseCase {
+  title: string;
+  description: string;
+  relatedGraphId?: string | null;
+}
+
+export interface DatasetGraph {
+  id: string;
+  title: string;
+  type: "bar" | "line" | "pie" | "doughnut" | "radar" | "scatter";
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor?: string | string[];
+    borderColor?: string;
+    tension?: number;
+  }[];
+}
+
 export interface Dataset {
   dataset_id: string;
   name: string;
@@ -84,6 +132,10 @@ export interface Dataset {
   synthetic_artifacts: SyntheticArtifact[];
   quality_report: QualityReport | null;
   catalog: CatalogColumn[];
+  // データカタログ拡張フィールド
+  sampleTables?: SampleTable[];
+  useCases?: DatasetUseCase[];
+  graphs?: DatasetGraph[];
 }
 
 export interface Submission {

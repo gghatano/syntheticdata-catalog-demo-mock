@@ -208,4 +208,678 @@ if __name__ == "__main__":
     ],
     created_at: "2024-08-01T09:00:00Z",
   },
+  {
+    proposal_id: "PROP0004",
+    dataset_id: "DS0004",
+    user_id: "user_demo_03",
+    title: "顧客セグメンテーション分析",
+    summary: "購買行動データを活用し、RFM分析とK-meansクラスタリングを組み合わせた顧客セグメンテーションを実施。各セグメントに最適なマーケティング施策を提案する。",
+    code: `"""顧客セグメンテーション分析"""
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    rfm = df.groupby("customer_id").agg(
+        recency=("purchase_date", "max"),
+        frequency=("customer_id", "count"),
+        monetary=("amount", "sum")
+    ).reset_index()
+
+    scaler = StandardScaler()
+    features = scaler.fit_transform(rfm[["frequency", "monetary"]])
+    kmeans = KMeans(n_clusters=4, random_state=42)
+    rfm["segment"] = kmeans.fit_predict(features)
+
+    result = {"segments": rfm.groupby("segment").size().to_dict()}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 顧客セグメンテーション分析
+
+## 目的
+購買行動データからRFM分析を行い、顧客を価値ベースでセグメント化する。
+
+## 手法
+- RFM（Recency, Frequency, Monetary）指標を算出
+- K-meansクラスタリングで4セグメントに分類
+- 各セグメントの特徴量を可視化
+
+## 結果
+- VIP顧客（12%）: 高頻度・高単価、月平均購入額 45,000円
+- アクティブ顧客（28%）: 中頻度・中単価
+- 休眠顧客（35%）: 低頻度、再活性化施策が必要
+- 新規顧客（25%）: 初回購入から3ヶ月以内
+
+## 提言
+1. VIP顧客向けロイヤリティプログラムの強化
+2. 休眠顧客向けリテンションキャンペーンの実施`,
+    status: "approved",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "セグメンテーションの手法が適切で、ビジネスへの示唆も明確です。承認します。",
+        created_at: "2024-09-25T14:00:00Z",
+      },
+    ],
+    created_at: "2024-09-20T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0005",
+    dataset_id: "DS0004",
+    user_id: "user_demo_06",
+    title: "購買パターンからのレコメンド最適化",
+    summary: "顧客の購買履歴から協調フィルタリングベースのレコメンドモデルを構築。クロスセル・アップセルの機会を自動検出し、売上向上に寄与する。",
+    code: `"""購買パターンからのレコメンド最適化"""
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    matrix = df.pivot_table(
+        index="customer_id", columns="product_category",
+        values="amount", aggfunc="sum", fill_value=0
+    )
+    similarity = cosine_similarity(matrix)
+
+    result = {"avg_similarity": round(similarity.mean(), 4)}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 購買パターンからのレコメンド最適化
+
+## 目的
+顧客の購買パターンを分析し、パーソナライズされた商品レコメンドを実現する。
+
+## 手法
+- 購買マトリクスを作成（顧客 x カテゴリ）
+- コサイン類似度による協調フィルタリング
+- Top-N レコメンドリストの生成
+
+## 結果
+- レコメンド精度（Precision@5）: 0.32
+- カバレッジ: 全カテゴリの85%をカバー
+- クロスセル率: 既存手法比 +18%
+
+## 今後の課題
+1. ディープラーニングベースのモデルとの比較
+2. リアルタイムレコメンドへの対応`,
+    status: "executed_synthetic",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "レコメンドモデルの設計が妥当です。合成データでの実行を承認します。",
+        created_at: "2024-10-08T11:00:00Z",
+      },
+    ],
+    created_at: "2024-10-05T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0006",
+    dataset_id: "DS0005",
+    user_id: "user_demo_04",
+    title: "商談成約率予測モデル",
+    summary: "CRMデータの商談ステージ遷移パターンを分析し、各商談の成約確率をリアルタイムに予測するモデルを構築。営業リソースの最適配分に活用する。",
+    code: `"""商談成約率予測モデル"""
+import pandas as pd
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import cross_val_score
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    features = pd.get_dummies(df[["stage", "deal_amount", "probability"]])
+    target = (df["stage"] == "受注").astype(int)
+
+    model = GradientBoostingClassifier(n_estimators=100, random_state=42)
+    scores = cross_val_score(model, features, target, cv=5)
+
+    result = {"cv_accuracy": round(scores.mean(), 3)}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 商談成約率予測モデル
+
+## 目的
+営業パイプラインの商談データから成約確率を予測し、営業活動の優先順位付けに活用する。
+
+## 手法
+- 商談ステージ・金額・確度を特徴量として使用
+- Gradient Boostingによる二値分類モデル
+- 5分割交差検証で評価
+
+## 結果
+- 交差検証精度: 0.847
+- 上位20%の商談に集中することで成約率が35%向上する見込み
+
+## 提言
+1. 営業チームへの予測スコアのリアルタイム提供
+2. 低確度商談の早期撤退基準の策定`,
+    status: "approved",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "comment",
+        comment: "予測精度は良好ですが、特徴量にタイムラグを考慮していますか？",
+        created_at: "2024-10-20T10:00:00Z",
+      },
+      {
+        id: 2,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "タイムラグの補足説明を確認しました。実用的なモデルと判断し、承認します。",
+        created_at: "2024-10-22T15:00:00Z",
+      },
+    ],
+    created_at: "2024-10-15T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0007",
+    dataset_id: "DS0006",
+    user_id: "user_demo_03",
+    title: "コンバージョン率改善分析",
+    summary: "Webアクセスログからコンバージョンファネルのボトルネックを特定し、UX改善のための具体的なアクションプランを提案する。A/Bテスト設計にも活用可能。",
+    code: `"""コンバージョン率改善分析"""
+import pandas as pd
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    funnel = df.groupby("page_path").agg(
+        sessions=("session_id", "nunique"),
+        conversions=("is_conversion", "sum"),
+        avg_duration=("duration_sec", "mean")
+    )
+    funnel["cvr"] = funnel["conversions"] / funnel["sessions"]
+
+    result = {"top_pages": funnel.nlargest(5, "cvr").to_dict("index")}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# コンバージョン率改善分析
+
+## 目的
+Webアクセスログからコンバージョンファネルを分析し、離脱ポイントを特定する。
+
+## 手法
+- ページパス別のセッション数・CV数・滞在時間を集計
+- ファネル分析で各ステップの離脱率を算出
+
+## 結果
+- 全体CVR: 3.2%
+- 最大離脱ポイント: 商品詳細 → カート追加（離脱率 68%）
+- モバイルのCVR（1.8%）がPC（5.1%）より大幅に低い
+
+## 提言
+1. 商品詳細ページのCTAボタン改善
+2. モバイルUI の最適化`,
+    status: "submitted",
+    reviews: [],
+    created_at: "2024-11-01T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0008",
+    dataset_id: "DS0006",
+    user_id: "user_demo_05",
+    title: "アクセスパターンの異常検知",
+    summary: "Webアクセスログの時系列パターンを分析し、通常と異なるアクセスパターン（bot攻撃、DDoS兆候等）を自動検出する異常検知モデルを構築する。",
+    code: `"""アクセスパターンの異常検知"""
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    hourly = df.groupby(pd.to_datetime(df["timestamp"]).dt.hour).agg(
+        request_count=("session_id", "count"),
+        avg_duration=("duration_sec", "mean")
+    )
+
+    model = IsolationForest(contamination=0.05, random_state=42)
+    hourly["anomaly"] = model.fit_predict(hourly)
+
+    result = {"anomalies": int((hourly["anomaly"] == -1).sum())}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# アクセスパターンの異常検知
+
+## 目的
+Webアクセスログから異常なアクセスパターンを自動検出し、セキュリティ対策に活用する。
+
+## 手法
+- 時間帯別のアクセス量・滞在時間を集計
+- Isolation Forestによる異常検知
+- 異常スコアの閾値を5%に設定
+
+## 結果
+- 検出された異常時間帯: 3件（深夜2-4時の急激なアクセス増）
+- 異常アクセスの特徴: 短い滞在時間、特定ページへの集中
+
+## 提言
+1. WAFルールの追加検討
+2. リアルタイム監視ダッシュボードの構築`,
+    status: "approved",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "セキュリティ観点で有用な分析です。異常検知の閾値設定も妥当と判断します。",
+        created_at: "2024-11-18T14:00:00Z",
+      },
+    ],
+    created_at: "2024-11-10T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0009",
+    dataset_id: "DS0007",
+    user_id: "user_demo_05",
+    title: "品質予測モデルの構築",
+    summary: "製造ラインのセンサーデータと品質検査結果を用いて、不良品発生を事前に予測するモデルを構築。予知保全と品質管理の高度化を実現する。",
+    code: `"""品質予測モデルの構築"""
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    X = df[["temperature"]].fillna(df["temperature"].mean())
+    y = df["is_defective"].astype(int)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
+    result = {"test_accuracy": round(model.score(X_test, y_test), 3)}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 品質予測モデルの構築
+
+## 目的
+製造時のセンサーデータから不良品発生を予測し、品質管理を強化する。
+
+## 手法
+- 温度・圧力等のセンサーデータを特徴量として使用
+- Random Forestによる不良品予測モデルの構築
+- 80/20でデータ分割し評価
+
+## 結果
+- テスト精度: 0.923
+- 不良品の検出率（Recall）: 0.87
+- 温度が最も重要な特徴量（重要度: 0.42）
+
+## 提言
+1. 製造ラインへのリアルタイム予測システムの導入
+2. 温度管理の閾値見直し`,
+    status: "executed_synthetic",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "品質管理への貢献度が高い分析です。合成データでの検証を進めてください。",
+        created_at: "2024-12-01T10:00:00Z",
+      },
+    ],
+    created_at: "2024-11-25T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0010",
+    dataset_id: "DS0008",
+    user_id: "user_demo_06",
+    title: "サポートチケット自動分類",
+    summary: "カスタマーサポートのチケットデータを自然言語処理で分析し、カテゴリ・優先度を自動分類するモデルを構築。対応効率の大幅な改善を目指す。",
+    code: `"""サポートチケット自動分類"""
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    vectorizer = TfidfVectorizer(max_features=1000)
+    X = vectorizer.fit_transform(df["description"])
+    y = df["category"]
+
+    model = MultinomialNB()
+    model.fit(X, y)
+
+    result = {"accuracy": round(model.score(X, y), 3)}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# サポートチケット自動分類
+
+## 目的
+問い合わせチケットを自動分類し、適切な担当者への振り分けを効率化する。
+
+## 手法
+- TF-IDFによるテキスト特徴量の抽出
+- Naive Bayesによるカテゴリ分類
+- 8カテゴリへの多値分類
+
+## 結果
+- 分類精度: 0.82
+- 上位3カテゴリの精度: 0.91
+- 処理時間: 1チケットあたり 0.02秒
+
+## 提言
+1. 自動分類結果の信頼度スコアに基づくエスカレーション
+2. BERTベースモデルへのアップグレード検討`,
+    status: "approved",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "NLP手法の選定が適切で、実用的な精度が出ています。承認します。",
+        created_at: "2025-01-10T16:00:00Z",
+      },
+    ],
+    created_at: "2025-01-05T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0011",
+    dataset_id: "DS0009",
+    user_id: "user_demo_07",
+    title: "組織ネットワーク分析",
+    summary: "社内コミュニケーションデータから組織のネットワーク構造を可視化。部門間の連携度やキーパーソンを特定し、組織改善施策に活用する。",
+    code: `"""組織ネットワーク分析"""
+import pandas as pd
+import networkx as nx
+import json, argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    G = nx.from_pandas_edgelist(df, "from_dept", "to_dept", edge_attr="message_count")
+
+    centrality = nx.degree_centrality(G)
+    result = {"centrality": centrality, "density": round(nx.density(G), 4)}
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 組織ネットワーク分析
+
+## 目的
+社内コミュニケーションの構造を分析し、組織の連携状況を可視化する。
+
+## 手法
+- 部門間のメッセージ量をネットワークグラフとして構築
+- 次数中心性・媒介中心性を算出
+- コミュニティ検出アルゴリズムの適用
+
+## 結果
+- ネットワーク密度: 0.72（比較的高い連携度）
+- ハブ部門: 経営企画部（中心性 0.89）
+- サイロ化傾向: 製造部と研究部の連携が薄い
+
+## 提言
+1. 製造部-研究部の合同プロジェクト推進
+2. 部門横断コミュニケーション施策の強化`,
+    status: "submitted",
+    reviews: [],
+    created_at: "2025-01-20T09:00:00Z",
+  },
+  {
+    proposal_id: "PROP0012",
+    dataset_id: "DS0010",
+    user_id: "user_demo_07",
+    title: "経費異常検知モデル - Isolation Forest × ルールベースハイブリッド手法",
+    summary: "機械学習（Isolation Forest）と経理部門のドメイン知識に基づくルールベース判定を組み合わせたハイブリッド手法により、経費申請の異常を高精度に検出するモデルを構築した。高額異常・頻度異常・パターン異常の3種類を包括的にカバーし、従来の目視チェックでは発見困難だった複合的な不正パターンも検出可能とする。",
+    code: `"""経費異常検知モデル - ハイブリッド手法（Isolation Forest + ルールベース）"""
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+import json
+import argparse
+
+
+def engineer_features(df):
+    """特徴量エンジニアリング"""
+    # 部門別中央値との乖離率
+    dept_median = df.groupby("department")["amount"].transform("median")
+    df["amount_dept_ratio"] = df["amount"] / dept_median.replace(0, 1)
+
+    # 費目別中央値との乖離率
+    cat_median = df.groupby("expense_category")["amount"].transform("median")
+    df["amount_cat_ratio"] = df["amount"] / cat_median.replace(0, 1)
+
+    # 申請者別の月次申請頻度
+    df["application_date"] = pd.to_datetime(df["application_date"])
+    df["year_month"] = df["application_date"].dt.to_period("M")
+    applicant_freq = df.groupby(["applicant_id", "year_month"]).size().reset_index(name="monthly_count")
+    df = df.merge(applicant_freq, on=["applicant_id", "year_month"], how="left")
+
+    # 領収書なし高額フラグ
+    df["no_receipt_high"] = ((~df["receipt_attached"]) & (df["amount"] > 50000)).astype(int)
+
+    # 金額のZ-score
+    df["amount_zscore"] = (df["amount"] - df["amount"].mean()) / df["amount"].std()
+
+    return df
+
+
+def rule_based_flags(df):
+    """ルールベース異常フラグ"""
+    flags = pd.DataFrame(index=df.index)
+    flags["high_amount"] = (df["amount_zscore"] > 3).astype(int)
+    flags["high_dept_ratio"] = (df["amount_dept_ratio"] > 5).astype(int)
+    flags["high_frequency"] = (df["monthly_count"] > 15).astype(int)
+    flags["no_receipt_high"] = df["no_receipt_high"]
+    flags["rule_score"] = flags.sum(axis=1) / 4
+    return flags
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    df = pd.read_csv(args.input)
+    df = engineer_features(df)
+
+    # Isolation Forest
+    feature_cols = ["amount", "amount_dept_ratio", "amount_cat_ratio", "monthly_count", "amount_zscore"]
+    X = StandardScaler().fit_transform(df[feature_cols].fillna(0))
+    iso_forest = IsolationForest(contamination=0.03, n_estimators=200, random_state=42)
+    df["iso_score"] = -iso_forest.decision_function(X)  # 高いほど異常
+    df["iso_score_norm"] = (df["iso_score"] - df["iso_score"].min()) / (df["iso_score"].max() - df["iso_score"].min())
+
+    # ルールベース
+    rule_flags = rule_based_flags(df)
+
+    # ハイブリッドスコア (重み付き平均)
+    df["hybrid_score"] = 0.6 * df["iso_score_norm"] + 0.4 * rule_flags["rule_score"]
+    df["is_anomaly"] = (df["hybrid_score"] > 0.5).astype(int)
+
+    anomalies = df[df["is_anomaly"] == 1]
+
+    result = {
+        "total_records": len(df),
+        "anomaly_count": int(anomalies["is_anomaly"].sum()),
+        "anomaly_rate": round(len(anomalies) / len(df) * 100, 2),
+        "avg_anomaly_amount": int(anomalies["amount"].mean()),
+        "avg_normal_amount": int(df[df["is_anomaly"] == 0]["amount"].mean()),
+        "anomaly_patterns": {
+            "high_amount": int(rule_flags["high_amount"].sum()),
+            "high_frequency": int(rule_flags["high_frequency"].sum()),
+            "no_receipt_high_amount": int(rule_flags["no_receipt_high"].sum()),
+        },
+        "top_anomaly_departments": anomalies.groupby("department").size().nlargest(3).to_dict(),
+    }
+
+    with open(args.output, "w") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+
+if __name__ == "__main__":
+    main()`,
+    report: `# 経費異常検知モデル - ハイブリッド手法
+
+## 1. 背景と目的
+当社の年間経費申請件数は約60,000件、総額約51億円に上る。経理部門による目視チェックには限界があり、統計的手法を用いた異常検知の自動化が求められている。本提案では、機械学習（Isolation Forest）とルールベースを組み合わせたハイブリッド手法により、不正・異常経費を高精度に検出するモデルを構築した。
+
+## 2. データ概要
+| 項目 | 値 |
+|------|-----|
+| 対象期間 | 2024年4月〜2025年3月 |
+| 総レコード数 | 5,000件 |
+| 申請者数 | 487名 |
+| 部門数 | 10部門 |
+| 費目数 | 15種別 |
+
+## 3. 特徴量エンジニアリング
+以下の特徴量を設計し、多角的な異常検知を実現した：
+
+| 特徴量 | 説明 | 異常検知への寄与 |
+|--------|------|-----------------|
+| amount_dept_ratio | 部門別中央値との乖離率 | 部門内での突出した高額申請を検知 |
+| amount_cat_ratio | 費目別中央値との乖離率 | 費目ごとの相場感からの逸脱を検知 |
+| monthly_count | 月次申請頻度 | 不自然に多い申請回数を検知 |
+| no_receipt_high | 領収書なし高額フラグ | 証憑不備の高額申請を検知 |
+| amount_zscore | 金額のZ-score | 全体分布からの統計的外れ値を検知 |
+
+## 4. モデル設計
+
+### 4.1 Isolation Forest（教師なし学習）
+- アルゴリズム: Isolation Forest（sklearn）
+- 推定汚染率: 3%
+- 決定木数: 200
+- 特徴: 高次元空間での孤立点を効率的に検出
+
+### 4.2 ルールベース（ドメイン知識）
+経理部門のヒアリングに基づく4つのルール：
+1. 金額Z-score > 3（統計的外れ値）
+2. 部門中央値の5倍超（部門内異常）
+3. 月次申請15件超（頻度異常）
+4. 領収書なし × 5万円超（証憑リスク）
+
+### 4.3 ハイブリッドスコア
+hybrid_score = 0.6 × IF正規化スコア + 0.4 × ルールスコア
+
+## 5. 評価結果
+
+| 指標 | 値 |
+|------|-----|
+| Precision | 0.87 |
+| Recall | 0.82 |
+| F1-score | 0.84 |
+| 異常検出数 | 150件（3.0%）|
+| 異常申請平均金額 | 458,000円 |
+| 正常申請平均金額 | 72,000円 |
+
+### 異常パターン分類
+| パターン | 件数 | 割合 | 代表例 |
+|----------|------|------|--------|
+| 高額異常 | 68件 | 45% | 営業部 交際費 385,000円 |
+| 頻度異常 | 42件 | 28% | 同一申請者が月20件以上 |
+| パターン異常 | 25件 | 17% | 月末集中申請、領収書なし高額 |
+| 複合異常 | 15件 | 10% | 高額 × 頻度 × 領収書なし |
+
+## 6. 経理部門への提言
+
+### 6.1 自動スクリーニングフロー
+1. 全申請に対してリアルタイムでスコア算出
+2. スコア0.7以上 → 自動フラグ＋経理部長エスカレーション
+3. スコア0.5-0.7 → 担当者による追加確認
+4. スコア0.5未満 → 通常承認フロー
+
+### 6.2 四半期レビュー
+- モデルの再学習（新しい申請データを反映）
+- 閾値の見直し（偽陽性率のモニタリング）
+- 新たな異常パターンのルール追加
+
+## 7. 今後の展望
+1. テキスト分析による申請理由の自然言語処理
+2. 承認者パターンの分析（承認の偏り検知）
+3. 外部データ（曜日・祝日・イベント）との突合
+4. リアルタイムダッシュボードの構築`,
+    status: "approved",
+    reviews: [
+      {
+        id: 1,
+        reviewer_user_id: "hr_demo",
+        action: "comment",
+        comment: "異常スコアの閾値0.5の根拠を教えてください。また、偽陽性（正常な申請を異常と判定）のリスクをどう評価していますか？経理部門の業務負荷に影響するため重要なポイントです。",
+        created_at: "2025-02-08T14:00:00Z",
+      },
+      {
+        id: 2,
+        reviewer_user_id: "hr_demo",
+        action: "approve",
+        comment: "閾値設定の根拠と段階的なスクリーニングフローの提案が適切です。特に経理部門への提言（6.1）の3段階フローは実運用に即しており、承認します。四半期レビューの仕組みも評価します。",
+        created_at: "2025-02-12T11:00:00Z",
+      },
+    ],
+    created_at: "2025-02-05T09:00:00Z",
+  },
 ];

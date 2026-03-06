@@ -1,7 +1,9 @@
 import { USERS } from "../data/users";
 import { DATASETS } from "../data/datasets";
+import { CATALOG_DATA } from "../data/catalog-data";
+import { DEFAULT_DATASET_LIKES, DEFAULT_PROPOSAL_LIKES } from "../data/likes";
 import { DemoState } from "../store/session";
-import { Dataset, Submission, Proposal, SubmissionStatus, ProposalStatus, FileType } from "../types/models";
+import { Dataset, Submission, Proposal, SubmissionStatus, ProposalStatus, FileType, SampleTable, DatasetUseCase, DatasetGraph } from "../types/models";
 
 export function getUserDisplayName(userId: string): string {
   return USERS.find((u) => u.user_id === userId)?.display_name ?? userId;
@@ -40,3 +42,28 @@ export const RESULT_SCOPE_LABELS: Record<string, string> = {
   submitter: "提出者のみ",
   public: "全体公開",
 };
+
+// カタログデータ取得ヘルパー
+export function getDatasetSampleTables(datasetId: string): SampleTable[] {
+  return CATALOG_DATA[datasetId]?.sampleTables ?? [];
+}
+
+export function getDatasetUseCases(datasetId: string): DatasetUseCase[] {
+  return CATALOG_DATA[datasetId]?.useCases ?? [];
+}
+
+export function getDatasetGraphs(datasetId: string): DatasetGraph[] {
+  return CATALOG_DATA[datasetId]?.graphs ?? [];
+}
+
+export function getDatasetLikeCount(state: DemoState, datasetId: string): number {
+  const base = DEFAULT_DATASET_LIKES[datasetId] ?? 0;
+  const userLiked = state.mutations.likedDatasets.includes(datasetId);
+  return base + (userLiked ? 1 : 0);
+}
+
+export function getProposalLikeCount(state: DemoState, proposalId: string): number {
+  const base = DEFAULT_PROPOSAL_LIKES[proposalId] ?? 0;
+  const userLiked = state.mutations.likedProposals.includes(proposalId);
+  return base + (userLiked ? 1 : 0);
+}

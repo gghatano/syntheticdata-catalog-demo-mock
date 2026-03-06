@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { PROPOSALS } from "../../data/proposals";
 import { loadState, setProposalStatus, addReview } from "../../store/session";
 import { StatusBadge } from "../../components/common/StatusBadge";
@@ -73,7 +74,7 @@ export function HrProposalDetailPage() {
       <section className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-3">レポート</h2>
         <div className="prose prose-sm max-w-none">
-          <ReactMarkdown>{proposal.report}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.report}</ReactMarkdown>
         </div>
       </section>
 

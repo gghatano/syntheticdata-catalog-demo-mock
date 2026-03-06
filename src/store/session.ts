@@ -14,6 +14,8 @@ export interface DemoState {
     addedReviews: Record<string, ReviewComment[]>;
     votedRequests: string[];
     catalogEdits: Record<string, Partial<CatalogColumn>[]>;
+    likedDatasets: string[];
+    likedProposals: string[];
   };
 }
 
@@ -29,6 +31,8 @@ function defaultState(): DemoState {
       addedReviews: {},
       votedRequests: [],
       catalogEdits: {},
+      likedDatasets: [],
+      likedProposals: [],
     },
   };
 }
@@ -125,6 +129,32 @@ export function addVote(state: DemoState, requestId: string): DemoState {
       ...state.mutations,
       votedRequests: [...state.mutations.votedRequests, requestId],
     },
+  };
+  saveState(newState);
+  return newState;
+}
+
+export function toggleDatasetLike(state: DemoState, datasetId: string): DemoState {
+  const liked = state.mutations.likedDatasets.includes(datasetId);
+  const newLiked = liked
+    ? state.mutations.likedDatasets.filter((id) => id !== datasetId)
+    : [...state.mutations.likedDatasets, datasetId];
+  const newState = {
+    ...state,
+    mutations: { ...state.mutations, likedDatasets: newLiked },
+  };
+  saveState(newState);
+  return newState;
+}
+
+export function toggleProposalLike(state: DemoState, proposalId: string): DemoState {
+  const liked = state.mutations.likedProposals.includes(proposalId);
+  const newLiked = liked
+    ? state.mutations.likedProposals.filter((id) => id !== proposalId)
+    : [...state.mutations.likedProposals, proposalId];
+  const newState = {
+    ...state,
+    mutations: { ...state.mutations, likedProposals: newLiked },
   };
   saveState(newState);
   return newState;

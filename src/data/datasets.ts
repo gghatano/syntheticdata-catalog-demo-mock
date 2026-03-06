@@ -100,4 +100,211 @@ export const DATASETS: Dataset[] = [
       { column_name: "offer_status", inferred_type: "string", is_pii: false, pii_reason: null, description: "内定状況", stats: { count: 200, null_count: 0, unique_count: 3 } },
     ],
   },
+  {
+    dataset_id: "DS0004",
+    name: "顧客購買行動データ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "ECサイトおよび実店舗における顧客の購買履歴・行動ログを統合したデータセット。顧客セグメンテーション、レコメンドエンジン、LTV予測など幅広いマーケティング施策に活用可能。",
+    tags: ["マーケティング", "顧客", "購買"],
+    created_at: "2024-09-15T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0004/customer_purchase.csv", created_at: "2024-09-15T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0004/customer_purchase_seed42.csv", seed: 42, created_at: "2024-09-30T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.92,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 10000, row_count_synthetic: 10000, column_correlation: 0.93, distribution_similarity: 0.91, statistical_parity: 0.92 },
+      ],
+    },
+    catalog: [
+      { column_name: "customer_id", inferred_type: "string", is_pii: true, pii_reason: "顧客ID", description: "顧客の一意識別子", stats: { count: 10000, null_count: 0, unique_count: 5000 } },
+      { column_name: "purchase_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "購買日", stats: { count: 10000, null_count: 0, unique_count: 365, min: "2023-01-01", max: "2024-09-14" } },
+      { column_name: "product_category", inferred_type: "string", is_pii: false, pii_reason: null, description: "商品カテゴリ", stats: { count: 10000, null_count: 0, unique_count: 12 } },
+      { column_name: "amount", inferred_type: "integer", is_pii: false, pii_reason: null, description: "購買金額(円)", stats: { count: 10000, null_count: 0, unique_count: 850, min: 100, max: 150000, mean: 8500, std: 12300, histogram: { bins: ["0-1000", "1000-5000", "5000-10000", "10000-50000", "50000+"], counts: [1200, 3500, 2800, 2000, 500] } } },
+      { column_name: "channel", inferred_type: "string", is_pii: false, pii_reason: null, description: "購買チャネル（EC/店舗）", stats: { count: 10000, null_count: 0, unique_count: 2 } },
+      { column_name: "age_group", inferred_type: "string", is_pii: false, pii_reason: null, description: "年代", stats: { count: 10000, null_count: 50, unique_count: 6 } },
+    ],
+  },
+  {
+    dataset_id: "DS0005",
+    name: "営業パイプラインデータ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "CRMシステムから抽出した営業活動の全記録。商談のステージ遷移、受注確度、担当者別の成約率など、営業戦略の立案と予測に不可欠なデータセット。",
+    tags: ["営業", "CRM", "商談"],
+    created_at: "2024-10-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0005/sales_pipeline.csv", created_at: "2024-10-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0005/sales_pipeline_seed42.csv", seed: 42, created_at: "2024-10-15T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.89,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 3000, row_count_synthetic: 3000, column_correlation: 0.90, distribution_similarity: 0.88, statistical_parity: 0.89 },
+      ],
+    },
+    catalog: [
+      { column_name: "deal_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "商談ID", stats: { count: 3000, null_count: 0, unique_count: 3000 } },
+      { column_name: "sales_rep", inferred_type: "string", is_pii: true, pii_reason: "営業担当者名", description: "営業担当者", stats: { count: 3000, null_count: 0, unique_count: 45 } },
+      { column_name: "stage", inferred_type: "string", is_pii: false, pii_reason: null, description: "商談ステージ", stats: { count: 3000, null_count: 0, unique_count: 6 } },
+      { column_name: "deal_amount", inferred_type: "integer", is_pii: false, pii_reason: null, description: "商談金額(万円)", stats: { count: 3000, null_count: 0, unique_count: 500, min: 10, max: 5000, mean: 450, std: 620, histogram: { bins: ["0-100", "100-500", "500-1000", "1000-3000", "3000+"], counts: [800, 1200, 600, 300, 100] } } },
+      { column_name: "probability", inferred_type: "float", is_pii: false, pii_reason: null, description: "受注確度(%)", stats: { count: 3000, null_count: 0, unique_count: 20, min: 5, max: 95, mean: 42.3, std: 25.1 } },
+      { column_name: "created_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "商談作成日", stats: { count: 3000, null_count: 0, unique_count: 300, min: "2023-04-01", max: "2024-09-30" } },
+    ],
+  },
+  {
+    dataset_id: "DS0006",
+    name: "Webアクセスログデータ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "自社Webサイトのアクセスログを匿名化・集約したデータセット。ページビュー、セッション、コンバージョンファネルの分析に活用でき、UX改善やマーケティング施策の効果測定に最適。",
+    tags: ["マーケティング", "Web", "アクセス解析"],
+    created_at: "2024-10-20T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0006/web_access_log.csv", created_at: "2024-10-20T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0006/web_access_log_seed42.csv", seed: 42, created_at: "2024-11-05T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.93,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 50000, row_count_synthetic: 50000, column_correlation: 0.94, distribution_similarity: 0.92, statistical_parity: 0.93 },
+      ],
+    },
+    catalog: [
+      { column_name: "session_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "セッションID", stats: { count: 50000, null_count: 0, unique_count: 30000 } },
+      { column_name: "page_path", inferred_type: "string", is_pii: false, pii_reason: null, description: "ページパス", stats: { count: 50000, null_count: 0, unique_count: 250 } },
+      { column_name: "referrer", inferred_type: "string", is_pii: false, pii_reason: null, description: "リファラー", stats: { count: 50000, null_count: 5000, unique_count: 80 } },
+      { column_name: "duration_sec", inferred_type: "integer", is_pii: false, pii_reason: null, description: "滞在時間(秒)", stats: { count: 50000, null_count: 0, unique_count: 300, min: 1, max: 1800, mean: 85, std: 120, histogram: { bins: ["0-10", "10-30", "30-60", "60-180", "180-600", "600+"], counts: [8000, 12000, 15000, 10000, 4000, 1000] } } },
+      { column_name: "device_type", inferred_type: "string", is_pii: false, pii_reason: null, description: "デバイス種別", stats: { count: 50000, null_count: 0, unique_count: 3 } },
+      { column_name: "is_conversion", inferred_type: "boolean", is_pii: false, pii_reason: null, description: "コンバージョンフラグ", stats: { count: 50000, null_count: 0, unique_count: 2 } },
+    ],
+  },
+  {
+    dataset_id: "DS0007",
+    name: "製品品質検査データ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "製造ラインのIoTセンサーと品質検査装置から収集された検査データ。不良品予測、工程最適化、予知保全など製造DXの基盤となるデータセット。",
+    tags: ["製造", "品質管理", "IoT"],
+    created_at: "2024-11-10T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0007/quality_inspection.csv", created_at: "2024-11-10T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0007/quality_inspection_seed42.csv", seed: 42, created_at: "2024-11-25T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.90,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 20000, row_count_synthetic: 20000, column_correlation: 0.91, distribution_similarity: 0.89, statistical_parity: 0.90 },
+      ],
+    },
+    catalog: [
+      { column_name: "inspection_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "検査ID", stats: { count: 20000, null_count: 0, unique_count: 20000 } },
+      { column_name: "product_line", inferred_type: "string", is_pii: false, pii_reason: null, description: "製品ライン", stats: { count: 20000, null_count: 0, unique_count: 8 } },
+      { column_name: "temperature", inferred_type: "float", is_pii: false, pii_reason: null, description: "製造時温度(℃)", stats: { count: 20000, null_count: 100, unique_count: 450, min: 18.0, max: 85.0, mean: 45.2, std: 12.8, histogram: { bins: ["18-30", "30-40", "40-50", "50-60", "60-85"], counts: [2000, 5000, 7000, 4000, 2000] } } },
+      { column_name: "defect_type", inferred_type: "string", is_pii: false, pii_reason: null, description: "不良種別", stats: { count: 20000, null_count: 0, unique_count: 5 } },
+      { column_name: "is_defective", inferred_type: "boolean", is_pii: false, pii_reason: null, description: "不良品フラグ", stats: { count: 20000, null_count: 0, unique_count: 2 } },
+    ],
+  },
+  {
+    dataset_id: "DS0008",
+    name: "顧客サポートチケットデータ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "カスタマーサポート部門の問い合わせチケット全件データ。自然言語処理による自動分類、感情分析、対応時間の最適化など、CS品質向上のための分析に活用可能。",
+    tags: ["カスタマーサポート", "NLP", "顧客"],
+    created_at: "2024-12-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0008/support_tickets.csv", created_at: "2024-12-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0008/support_tickets_seed42.csv", seed: 42, created_at: "2024-12-15T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.87,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 8000, row_count_synthetic: 8000, column_correlation: 0.88, distribution_similarity: 0.86, statistical_parity: 0.87 },
+      ],
+    },
+    catalog: [
+      { column_name: "ticket_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "チケットID", stats: { count: 8000, null_count: 0, unique_count: 8000 } },
+      { column_name: "customer_id", inferred_type: "string", is_pii: true, pii_reason: "顧客ID", description: "問い合わせ顧客ID", stats: { count: 8000, null_count: 0, unique_count: 5500 } },
+      { column_name: "category", inferred_type: "string", is_pii: false, pii_reason: null, description: "問い合わせカテゴリ", stats: { count: 8000, null_count: 0, unique_count: 8 } },
+      { column_name: "priority", inferred_type: "string", is_pii: false, pii_reason: null, description: "優先度", stats: { count: 8000, null_count: 0, unique_count: 3 } },
+      { column_name: "resolution_hours", inferred_type: "float", is_pii: false, pii_reason: null, description: "解決までの時間(h)", stats: { count: 8000, null_count: 200, unique_count: 500, min: 0.5, max: 168, mean: 12.5, std: 18.3, histogram: { bins: ["0-2", "2-8", "8-24", "24-72", "72+"], counts: [2000, 2500, 2000, 1000, 500] } } },
+      { column_name: "satisfaction_score", inferred_type: "integer", is_pii: false, pii_reason: null, description: "顧客満足度(1-5)", stats: { count: 8000, null_count: 1500, unique_count: 5, min: 1, max: 5, mean: 3.8, std: 1.1 } },
+    ],
+  },
+  {
+    dataset_id: "DS0009",
+    name: "社内コミュニケーション分析データ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "社内チャット・メール・会議の匿名化メタデータを統合したデータセット。組織のコミュニケーションパターン分析、チーム連携度の可視化、エンゲージメント向上施策に活用。",
+    tags: ["HR", "コミュニケーション", "組織"],
+    created_at: "2025-01-15T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0009/communication_meta.csv", created_at: "2025-01-15T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0009/communication_meta_seed42.csv", seed: 42, created_at: "2025-01-30T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.86,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 15000, row_count_synthetic: 15000, column_correlation: 0.87, distribution_similarity: 0.85, statistical_parity: 0.86 },
+      ],
+    },
+    catalog: [
+      { column_name: "interaction_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "インタラクションID", stats: { count: 15000, null_count: 0, unique_count: 15000 } },
+      { column_name: "from_dept", inferred_type: "string", is_pii: false, pii_reason: null, description: "発信元部署", stats: { count: 15000, null_count: 0, unique_count: 10 } },
+      { column_name: "to_dept", inferred_type: "string", is_pii: false, pii_reason: null, description: "送信先部署", stats: { count: 15000, null_count: 0, unique_count: 10 } },
+      { column_name: "channel_type", inferred_type: "string", is_pii: false, pii_reason: null, description: "チャネル種別(チャット/メール/会議)", stats: { count: 15000, null_count: 0, unique_count: 3 } },
+      { column_name: "message_count", inferred_type: "integer", is_pii: false, pii_reason: null, description: "メッセージ数", stats: { count: 15000, null_count: 0, unique_count: 50, min: 1, max: 200, mean: 15.3, std: 22.1, histogram: { bins: ["1-5", "5-10", "10-20", "20-50", "50+"], counts: [4000, 4500, 3500, 2000, 1000] } } },
+    ],
+  },
+  {
+    dataset_id: "DS0010",
+    name: "経費・予算管理データ",
+    owner_user_id: "hr_demo",
+    is_published: true,
+    description: "全部門の経費申請・予算消化状況を集約したデータセット。予算超過の早期検知、コスト最適化、不正経費の異常検知など、経営管理の高度化に活用可能。",
+    tags: ["経理", "予算", "コスト分析"],
+    created_at: "2025-02-01T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/DS0010/expense_budget.csv", created_at: "2025-02-01T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/DS0010/expense_budget_seed42.csv", seed: 42, created_at: "2025-02-15T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.95,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 5000, row_count_synthetic: 5000, column_correlation: 0.96, distribution_similarity: 0.94, statistical_parity: 0.95 },
+      ],
+    },
+    catalog: [
+      { column_name: "expense_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "経費ID", stats: { count: 5000, null_count: 0, unique_count: 5000 } },
+      { column_name: "applicant_id", inferred_type: "string", is_pii: true, pii_reason: "従業員ID", description: "申請者の従業員ID", stats: { count: 5000, null_count: 0, unique_count: 487 } },
+      { column_name: "department", inferred_type: "string", is_pii: false, pii_reason: null, description: "申請部署", stats: { count: 5000, null_count: 0, unique_count: 10 } },
+      { column_name: "expense_category", inferred_type: "string", is_pii: false, pii_reason: null, description: "費目", stats: { count: 5000, null_count: 0, unique_count: 15 } },
+      { column_name: "expense_detail", inferred_type: "string", is_pii: false, pii_reason: null, description: "費目詳細", stats: { count: 5000, null_count: 0, unique_count: 820 } },
+      { column_name: "amount", inferred_type: "integer", is_pii: false, pii_reason: null, description: "金額(円)", stats: { count: 5000, null_count: 0, unique_count: 2000, min: 500, max: 2000000, mean: 85000, std: 150000, histogram: { bins: ["0-10000", "10000-50000", "50000-100000", "100000-500000", "500000+"], counts: [1500, 1800, 900, 600, 200] } } },
+      { column_name: "application_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "申請日", stats: { count: 5000, null_count: 0, unique_count: 245, min: "2024-04-01", max: "2025-03-31" } },
+      { column_name: "approver_id", inferred_type: "string", is_pii: true, pii_reason: "承認者ID", description: "承認権限者の従業員ID", stats: { count: 5000, null_count: 0, unique_count: 52 } },
+      { column_name: "receipt_attached", inferred_type: "boolean", is_pii: false, pii_reason: null, description: "領収書添付有無", stats: { count: 5000, null_count: 0, unique_count: 2 } },
+      { column_name: "approval_status", inferred_type: "string", is_pii: false, pii_reason: null, description: "承認状況", stats: { count: 5000, null_count: 0, unique_count: 4 } },
+      { column_name: "budget_code", inferred_type: "string", is_pii: false, pii_reason: null, description: "予算コード", stats: { count: 5000, null_count: 0, unique_count: 30 } },
+      { column_name: "note", inferred_type: "string", is_pii: false, pii_reason: null, description: "備考", stats: { count: 5000, null_count: 200, unique_count: 1850 } },
+    ],
+  },
 ];
