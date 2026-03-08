@@ -21,6 +21,10 @@ import { ProposerProposalFormPage } from "./pages/proposer/ProposerProposalFormP
 import { ProposerProposalDetailPage } from "./pages/proposer/ProposerProposalDetailPage";
 import { DataRequestsPage } from "./pages/proposer/DataRequestsPage";
 import { CommunityProposalsPage } from "./pages/proposer/CommunityProposalsPage";
+import { ManualPage } from "./pages/manual/ManualPage";
+import { HrManualPage } from "./pages/manual/HrManualPage";
+import { ProposerManualPage } from "./pages/manual/ProposerManualPage";
+import { GlossaryPage } from "./pages/manual/GlossaryPage";
 
 export default function App() {
   return (
@@ -33,6 +37,10 @@ export default function App() {
           <Route element={<RequireAuth />}>
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/manual" element={<ManualPage />} />
+              <Route path="/manual/hr" element={<HrManualPage />} />
+              <Route path="/manual/proposer" element={<ProposerManualPage />} />
+              <Route path="/manual/glossary" element={<GlossaryPage />} />
             </Route>
           </Route>
 

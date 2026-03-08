@@ -44,6 +44,7 @@ export function Navbar() {
             </div>
           </div>
           <div className="flex items-center gap-4 text-sm">
+            <Link to="/manual" className="hover:text-blue-200">📖 マニュアル</Link>
             <span>{user.display_name}（{user.department}）</span>
             <button onClick={handleLogout} className="hover:text-blue-200">
               ログアウト

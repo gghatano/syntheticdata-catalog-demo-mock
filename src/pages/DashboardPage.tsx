@@ -159,6 +159,22 @@ export function DashboardPage() {
         <p className="text-gray-500 mt-1">
           {isHr ? "データセットとレビューの状況を確認しましょう" : "データの活用状況をチェックしましょう"}
         </p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link
+            to="/manual"
+            className="inline-flex items-center gap-1.5 text-sm bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <span>📖</span>
+            操作マニュアルを見る
+          </Link>
+          <Link
+            to={isHr ? "/manual/hr" : "/manual/proposer"}
+            className="inline-flex items-center gap-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <span>{isHr ? "🏢" : "🔍"}</span>
+            {isHr ? "データオーナー向けマニュアル" : "データ利用者向けマニュアル"}
+          </Link>
+        </div>
       </div>
 
       {/* Summary Stat Cards */}
