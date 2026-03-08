@@ -103,7 +103,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0004",
     name: "顧客購買行動データ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "marketing_demo",
     is_published: true,
     description: "ECサイトおよび実店舗における顧客の購買履歴・行動ログを統合したデータセット。顧客セグメンテーション、レコメンドエンジン、LTV予測など幅広いマーケティング施策に活用可能。",
     tags: ["マーケティング", "顧客", "購買"],
@@ -132,7 +132,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0005",
     name: "営業パイプラインデータ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "sales_demo",
     is_published: true,
     description: "CRMシステムから抽出した営業活動の全記録。商談のステージ遷移、受注確度、担当者別の成約率など、営業戦略の立案と予測に不可欠なデータセット。",
     tags: ["営業", "CRM", "商談"],
@@ -161,7 +161,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0006",
     name: "Webアクセスログデータ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "marketing_demo",
     is_published: true,
     description: "自社Webサイトのアクセスログを匿名化・集約したデータセット。ページビュー、セッション、コンバージョンファネルの分析に活用でき、UX改善やマーケティング施策の効果測定に最適。",
     tags: ["マーケティング", "Web", "アクセス解析"],
@@ -190,7 +190,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0007",
     name: "製品品質検査データ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "manufacturing_demo",
     is_published: true,
     description: "製造ラインのIoTセンサーと品質検査装置から収集された検査データ。不良品予測、工程最適化、予知保全など製造DXの基盤となるデータセット。",
     tags: ["製造", "品質管理", "IoT"],
@@ -218,7 +218,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0008",
     name: "顧客サポートチケットデータ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "cs_demo",
     is_published: true,
     description: "カスタマーサポート部門の問い合わせチケット全件データ。自然言語処理による自動分類、感情分析、対応時間の最適化など、CS品質向上のための分析に活用可能。",
     tags: ["カスタマーサポート", "NLP", "顧客"],
@@ -275,7 +275,7 @@ export const DATASETS: Dataset[] = [
   {
     dataset_id: "DS0010",
     name: "経費・予算管理データ",
-    owner_user_id: "hr_demo",
+    owner_user_id: "finance_demo",
     is_published: true,
     description: "全部門の経費申請・予算消化状況を集約したデータセット。予算超過の早期検知、コスト最適化、不正経費の異常検知など、経営管理の高度化に活用可能。",
     tags: ["経理", "予算", "コスト分析"],
