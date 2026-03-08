@@ -54,11 +54,11 @@ export function ManualPage() {
             データオーナー向けマニュアル
           </h2>
           <p className="text-gray-500 text-sm flex-1">
-            人事・データ管理部門の方向け。データセットの公開・管理、
+            人事・データ管理部門の方向け。データセットの公開・管理、合成データ生成、
             利用提案のレビュー、実行管理などの操作手順を解説します。
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["データセット管理", "提案レビュー", "実行管理", "カタログ編集"].map((tag) => (
+            {["データセット管理", "合成データ生成", "提案レビュー", "実行管理"].map((tag) => (
               <span key={tag} className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full">
                 {tag}
               </span>

@@ -22,12 +22,14 @@ function StepCard({
     green: "border-green-500 bg-green-50",
     orange: "border-orange-500 bg-orange-50",
     purple: "border-purple-500 bg-purple-50",
+    teal: "border-teal-500 bg-teal-50",
   };
   const badgeMap: Record<string, string> = {
     blue: "bg-blue-500",
     green: "bg-green-500",
     orange: "bg-orange-500",
     purple: "bg-purple-500",
+    teal: "bg-teal-500",
   };
 
   return (
@@ -73,7 +75,8 @@ function FlowDiagram() {
   const steps = [
     { label: "データセット\n登録・管理", icon: "🗄️", color: "bg-blue-100 border-blue-300" },
     { label: "カタログ情報\n編集", icon: "✏️", color: "bg-indigo-100 border-indigo-300" },
-    { label: "データセット\n公開", icon: "🌐", color: "bg-green-100 border-green-300" },
+    { label: "合成データ\n生成", icon: "🤖", color: "bg-green-100 border-green-300" },
+    { label: "データセット\n公開", icon: "🌐", color: "bg-teal-100 border-teal-300" },
     { label: "利用提案の\nレビュー", icon: "📋", color: "bg-orange-100 border-orange-300" },
     { label: "実行管理・\n結果確認", icon: "⚙️", color: "bg-purple-100 border-purple-300" },
   ];
@@ -129,6 +132,7 @@ export function HrManualPage() {
         <ul className="space-y-1 text-sm text-blue-900">
           <li>✅ データセットを管理・公開する方法</li>
           <li>✅ カタログ情報（説明・タグ・利用規約など）を編集する方法</li>
+          <li>✅ データセットから合成データを生成する方法</li>
           <li>✅ データ利用者からの提案をレビュー・承認する方法</li>
           <li>✅ 合成データの実行状況を確認する方法</li>
         </ul>
@@ -199,6 +203,40 @@ export function HrManualPage() {
       <StepCard
         id="step3"
         step={3}
+        title="合成データの生成"
+        description="カタログ情報が整ったら、データセットから合成データを生成します。生成した合成データはカタログに掲載され、データ利用者が活用提案（企画）を検討する際の重要な判断材料となります。"
+        icon="🤖"
+        color="green"
+      >
+        <div className="space-y-2">
+          <OperationItem
+            label="合成データを生成する"
+            detail="データセット詳細ページの「合成データ生成」ボタンから生成を実行します。生成には数秒〜数分かかる場合があります。"
+            link="/hr/datasets"
+          />
+          <OperationItem
+            label="生成した合成データを確認する"
+            detail="生成が完了すると、データセット詳細ページの「合成データ」セクションに生成ファイルが一覧表示されます。"
+          />
+          <OperationItem
+            label="品質レポートを確認する"
+            detail="生成後に品質レポートが表示されます。元データとの列相関・分布類似度・統計的均一性などのスコアを確認できます。"
+          />
+        </div>
+        <div className="mt-4 bg-white rounded-lg p-3 border border-green-200 text-sm">
+          <p className="font-medium text-green-800 mb-1">💡 なぜ合成データを事前に生成するの？</p>
+          <p className="text-gray-600">
+            データ利用者はカタログ情報と合成データを参照しながら活用提案を考えます。
+            データセットを公開する前に合成データを生成しておくことで、利用者が具体的な提案を作成しやすくなります。
+            品質スコアが低い場合は、カタログ情報（テーブル定義・型情報など）を見直してから再生成することを検討してください。
+          </p>
+        </div>
+      </StepCard>
+
+      {/* Step 4 */}
+      <StepCard
+        id="step4"
+        step={4}
         title="提案のレビュー"
         description="データ利用者からの活用提案をレビュー・承認します。提案内容を確認して、適切かどうかを判断してください。"
         icon="📋"
@@ -230,10 +268,10 @@ export function HrManualPage() {
         </div>
       </StepCard>
 
-      {/* Step 4 */}
+      {/* Step 5 */}
       <StepCard
-        id="step4"
-        step={4}
+        id="step5"
+        step={5}
         title="実行管理"
         description="合成データの生成・実行の状況を管理します。提出された実行リクエストをレビューし、結果を確認できます。"
         icon="⚙️"
@@ -260,7 +298,11 @@ export function HrManualPage() {
       <div className="bg-gray-50 rounded-xl p-6">
         <h2 className="text-lg font-bold text-gray-800 mb-4">❓ よくある質問</h2>
         <div className="space-y-4">
-          {[
+          [
+            {
+              q: "合成データを生成しないとデータセットを公開できませんか？",
+              a: "公開自体は合成データなしでも可能ですが、合成データを事前に生成しておくことを強く推奨します。データ利用者はカタログ情報と合成データを見ながら提案を検討するため、合成データが充実しているほど質の高い提案が集まりやすくなります。",
+            },
             {
               q: "データセットを公開したあと、非公開に戻せますか？",
               a: "はい、データセット詳細ページから「非公開にする」ボタンで非公開に戻せます。非公開にすると、データ利用者はアクセスできなくなります。",
