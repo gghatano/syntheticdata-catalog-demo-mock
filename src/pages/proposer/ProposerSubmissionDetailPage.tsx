@@ -1,18 +1,29 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { SUBMISSIONS } from "../../data/submissions";
 import { EXECUTIONS } from "../../data/executions";
-import { loadState } from "../../store/session";
+import { loadState, setSubmissionStatus } from "../../store/session";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { DataTable } from "../../components/common/DataTable";
+import { ActionButton } from "../../components/common/ActionButton";
+import { useToast } from "../../components/common/Toast";
 import { formatDate, formatDateTime } from "../../utils/format";
 import { getDatasetName, getEffectiveSubmissionStatus } from "../../utils/data";
 
 export function ProposerSubmissionDetailPage() {
   const { id } = useParams<{ id: string }>();
   const submission = SUBMISSIONS.find((s) => s.submission_id === id);
-  const state = loadState();
+  const [state, setState] = useState(loadState);
+  const { showToast } = useToast();
 
   if (!submission) return <p className="text-red-500">提出物が見つかりません</p>;
+
+  const handleExecuteSynthetic = async () => {
+    showToast("合成データで実行中...", "info");
+    await new Promise((r) => setTimeout(r, 2000));
+    setState(setSubmissionStatus(state, submission.submission_id, "executed_synthetic"));
+    showToast("合成データでの実行が完了しました", "success");
+  };
 
   const status = getEffectiveSubmissionStatus(state, submission);
   const executions = EXECUTIONS.filter((e) => e.submission_id === submission.submission_id);
@@ -35,6 +46,18 @@ export function ProposerSubmissionDetailPage() {
         <h2 className="text-lg font-semibold mb-3">説明</h2>
         <p className="text-sm text-gray-700">{submission.description}</p>
       </section>
+
+      {status === "submitted" && (
+        <section className="bg-white rounded-lg shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-3">実行</h2>
+          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-sm text-blue-800">
+            合成データの分析は承認不要でいつでも実行できます。実データの利用にはHR担当者による承認が必要です。
+          </div>
+          <ActionButton onClick={handleExecuteSynthetic}>
+            合成データで実行
+          </ActionButton>
+        </section>
+      )}
 
       {executions.length > 0 && (
         <section className="bg-white rounded-lg shadow p-6 mb-6">

@@ -27,7 +27,10 @@ export function HrSubmissionsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">実行管理</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">実データ利用管理</h1>
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800">
+        合成データの分析はプロポーザーが承認不要で実行できます。ここでは<strong>実データ利用</strong>の承認・実行を管理します。
+      </div>
       <div className="bg-white rounded-lg shadow">
         <DataTable
           columns={[
@@ -38,23 +41,20 @@ export function HrSubmissionsPage() {
             { header: "ステータス", accessor: (s) => <StatusBadge status={getEffectiveSubmissionStatus(state, s)} /> },
             { header: "提出日", accessor: (s) => formatDate(s.created_at) },
             {
-              header: "操作",
+              header: "操作（実データ利用）",
               accessor: (s) => {
                 const status = getEffectiveSubmissionStatus(state, s);
                 if (status === "submitted") {
                   return (
                     <div className="flex gap-2">
-                      <ActionButton variant="success" onClick={() => updateStatus(s.submission_id, "approved")}>承認</ActionButton>
+                      <ActionButton variant="success" onClick={() => updateStatus(s.submission_id, "approved")}>実データ利用を承認</ActionButton>
                       <ActionButton variant="danger" onClick={() => updateStatus(s.submission_id, "rejected")}>却下</ActionButton>
                     </div>
                   );
                 }
                 if (status === "approved") {
                   return (
-                    <div className="flex gap-2">
-                      <ActionButton onClick={() => handleExecute(s.submission_id, "synthetic")}>合成データで実行</ActionButton>
-                      <ActionButton onClick={() => handleExecute(s.submission_id, "real")}>実データで実行</ActionButton>
-                    </div>
+                    <ActionButton onClick={() => handleExecute(s.submission_id, "real")}>実データで実行</ActionButton>
                   );
                 }
                 if (status === "executed_synthetic" || status === "executed_real") {
