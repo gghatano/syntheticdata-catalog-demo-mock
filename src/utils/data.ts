@@ -32,9 +32,9 @@ export function getEffectiveProposalStatus(state: DemoState, proposal: Proposal)
 }
 
 export const FILE_TYPE_LABELS: Record<FileType, string> = {
-  employee_master: "従業員マスタ",
-  project_allocation: "プロジェクト配置",
-  working_hours: "稼働時間",
+  employee_master: "行員マスタ",
+  project_allocation: "店舗配置",
+  working_hours: "勤務時間",
 };
 
 export const RESULT_SCOPE_LABELS: Record<string, string> = {
