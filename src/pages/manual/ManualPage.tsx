@@ -55,10 +55,10 @@ export function ManualPage() {
           </h2>
           <p className="text-gray-500 text-sm flex-1">
             人事・データ管理部門の方向け。データセットの公開・管理、合成データ生成、
-            利用提案のレビュー、実行管理などの操作手順を解説します。
+            利用提案のレビュー、分析実行管理などの操作手順を解説します。
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["データセット管理", "合成データ生成", "提案レビュー", "実行管理"].map((tag) => (
+            {["データセット管理", "合成データ生成", "提案レビュー", "分析実行管理"].map((tag) => (
               <span key={tag} className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full">
                 {tag}
               </span>
@@ -79,10 +79,10 @@ export function ManualPage() {
           </h2>
           <p className="text-gray-500 text-sm flex-1">
             データを活用したい研究者・分析者の方向け。データセットの探し方、
-            活用提案の作成、合成データの実行リクエストなどを解説します。
+            活用提案の作成、合成データの分析実行リクエストなどを解説します。
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["データ検索", "活用提案", "実行リクエスト", "コミュニティ"].map((tag) => (
+            {["データ検索", "活用提案", "分析実行リクエスト", "全体の提案"].map((tag) => (
               <span key={tag} className="text-xs bg-green-50 text-green-600 px-2 py-1 rounded-full">
                 {tag}
               </span>

@@ -19,7 +19,7 @@ export function DataRequestsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">データリクエスト</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">データ公開リクエスト</h1>
 
       <section className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-3">新規リクエスト</h2>

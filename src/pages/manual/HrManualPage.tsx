@@ -78,7 +78,7 @@ function FlowDiagram() {
     { label: "合成データ\n生成", icon: "🤖", color: "bg-green-100 border-green-300" },
     { label: "データセット\n公開", icon: "🌐", color: "bg-teal-100 border-teal-300" },
     { label: "利用提案の\nレビュー", icon: "📋", color: "bg-orange-100 border-orange-300" },
-    { label: "実行管理・\n結果確認", icon: "⚙️", color: "bg-purple-100 border-purple-300" },
+    { label: "分析実行管理・\n結果確認", icon: "⚙️", color: "bg-purple-100 border-purple-300" },
   ];
 
   return (
@@ -134,7 +134,7 @@ export function HrManualPage() {
           <li>✅ カタログ情報（説明・タグ・利用規約など）を編集する方法</li>
           <li>✅ データセットから合成データを生成する方法</li>
           <li>✅ データ利用者からの提案をレビュー・承認する方法</li>
-          <li>✅ 合成データの実行状況を確認する方法</li>
+          <li>✅ 分析実行リクエストの状況を確認する方法</li>
         </ul>
       </div>
 
@@ -272,24 +272,24 @@ export function HrManualPage() {
       <StepCard
         id="step5"
         step={5}
-        title="実行管理"
-        description="合成データの生成・実行の状況を管理します。提出された実行リクエストをレビューし、結果を確認できます。"
+        title="分析実行管理"
+        description="合成データの生成・実行の状況を管理します。提出された分析実行リクエストをレビューし、結果を確認できます。"
         icon="⚙️"
         color="purple"
       >
         <div className="space-y-2">
           <OperationItem
-            label="実行一覧を確認する"
-            detail="「実行管理」メニューから、すべての実行リクエストの状況を確認できます。"
+            label="分析実行一覧を確認する"
+            detail="「分析実行管理」メニューから、すべての分析実行リクエストの状況を確認できます。"
             link="/hr/submissions"
           />
           <OperationItem
-            label="実行の詳細を確認する"
-            detail="実行をクリックすると、使用したパラメータ・実行結果・ダウンロードリンクなどを確認できます。"
+            label="分析実行の詳細を確認する"
+            detail="分析実行リクエストをクリックすると、使用したパラメータ・実行結果・ダウンロードリンクなどを確認できます。"
           />
           <OperationItem
-            label="実行リクエストを承認・却下する"
-            detail="実行前にレビューが必要な場合、承認または却下の対応を行います。"
+            label="分析実行リクエストを承認・却下する"
+            detail="分析実行前にレビューが必要な場合、承認または却下の対応を行います。"
           />
         </div>
       </StepCard>
@@ -313,7 +313,7 @@ export function HrManualPage() {
             },
             {
               q: "提案を承認したら、次に何をすればいいですか？",
-              a: "承認後、データ利用者が実行リクエストを提出します。実行管理ページで状況を確認し、必要に応じてレビューを行ってください。",
+              a: "承認後、データ利用者が分析実行リクエストを提出します。分析実行管理ページで状況を確認し、必要に応じてレビューを行ってください。",
             },
             {
               q: "複数の担当者でレビューできますか？",
