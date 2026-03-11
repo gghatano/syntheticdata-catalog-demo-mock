@@ -16,7 +16,7 @@ export function ProposerSubmissionDetailPage() {
   const [state, setState] = useState(loadState);
   const { showToast } = useToast();
 
-  if (!submission) return <p className="text-red-500">提出物が見つかりません</p>;
+  if (!submission) return <p className="text-red-500">分析実行リクエストが見つかりません</p>;
 
   const handleExecuteSynthetic = async () => {
     showToast("合成データで実行中...", "info");
@@ -33,7 +33,7 @@ export function ProposerSubmissionDetailPage() {
       <h1 className="text-2xl font-bold text-gray-800 mb-6">{submission.title}</h1>
 
       <section className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-3">提出物情報</h2>
+        <h2 className="text-lg font-semibold mb-3">分析実行リクエスト情報</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-500">提出ID:</span> {submission.submission_id}</div>
           <div><span className="text-gray-500">データセット:</span> {getDatasetName(submission.dataset_id)}</div>

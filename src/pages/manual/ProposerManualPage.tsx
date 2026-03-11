@@ -76,7 +76,7 @@ function FlowDiagram() {
     { label: "データセットを\n探す", icon: "🔍", color: "bg-blue-100 border-blue-300" },
     { label: "活用提案を\n作成", icon: "💡", color: "bg-green-100 border-green-300" },
     { label: "レビュー待ち\n（承認待ち）", icon: "⏳", color: "bg-orange-100 border-orange-300" },
-    { label: "実行リクエスト\nを提出", icon: "🚀", color: "bg-purple-100 border-purple-300" },
+    { label: "分析実行リクエスト\nを提出", icon: "🚀", color: "bg-purple-100 border-purple-300" },
     { label: "結果を\n確認・活用", icon: "📊", color: "bg-teal-100 border-teal-300" },
   ];
 
@@ -131,9 +131,9 @@ export function ProposerManualPage() {
         <ul className="space-y-1 text-sm text-green-900">
           <li>✅ データセットを探して内容を確認する方法</li>
           <li>✅ データの活用提案を作成・提出する方法</li>
-          <li>✅ データリクエストを送る方法</li>
-          <li>✅ 合成データの実行リクエストを提出する方法</li>
-          <li>✅ コミュニティの提案を参照・いいねする方法</li>
+          <li>✅ 合成データの分析実行リクエストを提出する方法</li>
+          <li>✅ 全体の提案を参照・いいねする方法</li>
+          <li>✅ データ公開リクエストを送る方法</li>
         </ul>
       </div>
 
@@ -158,7 +158,7 @@ export function ProposerManualPage() {
           />
           <OperationItem
             label="いいねをつける"
-            detail="興味のあるデータセットにいいね（♡）をつけると、コミュニティへの関心度を示せます。"
+            detail="興味のあるデータセットにいいね（♡）をつけると、全体への関心度を示せます。"
           />
         </div>
         <div className="mt-4 bg-white rounded-lg p-3 border border-blue-200 text-sm">
@@ -210,49 +210,20 @@ export function ProposerManualPage() {
       <StepCard
         id="step3"
         step={3}
-        title="データリクエストを送る"
-        description="まだ公開されていないデータが必要な場合や、特定のデータを要望したい場合は、データリクエストを送ることができます。"
-        icon="📨"
-        color="orange"
-      >
-        <div className="space-y-2">
-          <OperationItem
-            label="データリクエスト一覧を見る"
-            detail="「データリクエスト」メニューから過去のリクエスト状況を確認できます。"
-            link="/proposer/data-requests"
-          />
-          <OperationItem
-            label="新しいリクエストを送る"
-            detail="必要なデータの内容・理由・利用目的などを記入して送信します。データオーナーが確認・対応します。"
-          />
-        </div>
-        <div className="mt-4 bg-white rounded-lg p-3 border border-orange-200 text-sm">
-          <p className="font-medium text-orange-800 mb-1">💡 リクエストのコツ</p>
-          <p className="text-gray-600">
-            なぜそのデータが必要なのかを具体的に書くと、データオーナーに伝わりやすくなります。
-            既存のデータセットで代替できないかも確認してみましょう。
-          </p>
-        </div>
-      </StepCard>
-
-      {/* Step 4 */}
-      <StepCard
-        id="step4"
-        step={4}
-        title="実行リクエストを提出する"
-        description="提案が承認されたら、合成データの実行リクエストを提出します。パラメータを設定して生成を依頼します。"
+        title="分析実行リクエストを提出する"
+        description="提案が承認されたら、合成データの分析実行リクエストを提出します。パラメータを設定して生成を依頼します。"
         icon="🚀"
         color="purple"
       >
         <div className="space-y-2">
           <OperationItem
-            label="マイ実行を管理する"
-            detail="「マイ実行」メニューから自分の実行リクエスト一覧を確認できます。"
+            label="マイ分析実行を管理する"
+            detail="「マイ分析実行」メニューから自分の分析実行リクエスト一覧を確認できます。"
             link="/proposer/submissions"
           />
           <OperationItem
-            label="新しい実行リクエストを作成する"
-            detail="「新規実行」ボタンから実行リクエストを作成します。使用するデータセット・行数・ファイル形式などのパラメータを設定します。"
+            label="新しい分析実行リクエストを作成する"
+            detail="「新規分析実行リクエストを作成」ボタンから分析実行リクエストを作成します。使用するデータセット・行数・ファイル形式などのパラメータを設定します。"
             link="/proposer/submissions/new"
           />
           <OperationItem
@@ -271,30 +242,59 @@ export function ProposerManualPage() {
         </div>
       </StepCard>
 
-      {/* Community */}
+      {/* Step 4 */}
       <StepCard
-        id="community"
-        step={5}
-        title="コミュニティを活用する"
-        description="他のユーザーの提案を参照したり、いいねをつけてコミュニティ活動に参加しましょう。"
+        id="step4"
+        step={4}
+        title="全体の提案を活用する"
+        description="他のユーザーの提案を参照したり、いいねをつけて全体の活動に参加しましょう。"
         icon="🌐"
         color="teal"
       >
         <div className="space-y-2">
           <OperationItem
-            label="コミュニティ提案を見る"
-            detail="「コミュニティ」メニューから他のユーザーが公開した提案を閲覧できます。活用事例の参考になります。"
+            label="全体の提案を見る"
+            detail="「全体の提案」メニューから他のユーザーが公開した提案を閲覧できます。活用事例の参考になります。"
             link="/proposer/community"
           />
           <OperationItem
             label="提案にいいねをつける"
-            detail="興味のある提案にいいね（♡）をつけることで、コミュニティでの注目度が上がります。"
+            detail="興味のある提案にいいね（♡）をつけることで、全体での注目度が上がります。"
           />
           <OperationItem
             label="注目の提案を確認する"
             detail="ダッシュボードの「注目のユースケース」セクションで、人気の提案をまとめて確認できます。"
             link="/dashboard"
           />
+        </div>
+      </StepCard>
+
+      {/* Step 5 */}
+      <StepCard
+        id="step5"
+        step={5}
+        title="データ公開リクエストを送る"
+        description="まだ公開されていないデータが必要な場合や、特定のデータを要望したい場合は、データ公開リクエストを送ることができます。"
+        icon="📨"
+        color="orange"
+      >
+        <div className="space-y-2">
+          <OperationItem
+            label="データ公開リクエスト一覧を見る"
+            detail="「データ公開リクエスト」メニューから過去のリクエスト状況を確認できます。"
+            link="/proposer/data-requests"
+          />
+          <OperationItem
+            label="新しいリクエストを送る"
+            detail="必要なデータの内容・理由・利用目的などを記入して送信します。データオーナーが確認・対応します。"
+          />
+        </div>
+        <div className="mt-4 bg-white rounded-lg p-3 border border-orange-200 text-sm">
+          <p className="font-medium text-orange-800 mb-1">💡 リクエストのコツ</p>
+          <p className="text-gray-600">
+            なぜそのデータが必要なのかを具体的に書くと、データオーナーに伝わりやすくなります。
+            既存のデータセットで代替できないかも確認してみましょう。
+          </p>
         </div>
       </StepCard>
 
@@ -309,15 +309,15 @@ export function ProposerManualPage() {
             },
             {
               q: "欲しいデータセットが見当たりません",
-              a: "「データリクエスト」機能を使って、データオーナーに新しいデータセットの作成を依頼できます。",
+              a: "「データ公開リクエスト」機能を使って、データオーナーに新しいデータセットの作成を依頼できます。",
             },
             {
               q: "実行がなかなか完了しません",
-              a: "合成データの生成には時間がかかる場合があります。「マイ実行」ページで状態を確認してください。「処理中」の場合はしばらくお待ちください。",
+              a: "合成データの生成には時間がかかる場合があります。「マイ分析実行」ページで状態を確認してください。「処理中」の場合はしばらくお待ちください。",
             },
             {
               q: "他の人の提案内容を参考にできますか？",
-              a: "はい、「コミュニティ」ページで承認済みの提案を閲覧できます。同様のユースケースを参考に提案を作成しましょう。",
+              a: "はい、「全体の提案」ページで承認済みの提案を閲覧できます。同様のユースケースを参考に提案を作成しましょう。",
             },
           ].map((faq, i) => (
             <div key={i} className="bg-white rounded-lg p-4 shadow-sm">

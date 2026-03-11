@@ -27,7 +27,7 @@ export function HrSubmissionsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">実データ利用管理</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">分析実行管理</h1>
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800">
         合成データの分析はプロポーザーが承認不要で実行できます。ここでは<strong>実データ利用</strong>の承認・実行を管理します。
       </div>

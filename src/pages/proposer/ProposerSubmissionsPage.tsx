@@ -24,7 +24,7 @@ export function ProposerSubmissionsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">マイ実行一覧</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">マイ分析実行一覧</h1>
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-sm text-blue-800">
         合成データの分析は承認不要でいつでも実行できます。実データの利用はデータオーナーとの連携（HR承認）が必要です。
       </div>
@@ -56,7 +56,7 @@ export function ProposerSubmissionsPage() {
             },
           ]}
           data={mySubmissions}
-          emptyMessage="提出物はまだありません"
+          emptyMessage="分析実行リクエストはまだありません"
         />
       </div>
     </div>

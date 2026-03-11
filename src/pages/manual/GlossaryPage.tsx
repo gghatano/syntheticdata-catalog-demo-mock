@@ -40,7 +40,7 @@ const GLOSSARY: GlossaryTerm[] = [
     term: "データオーナー",
     reading: "データオーナー",
     description:
-      "データセットを管理・公開する責任者。人事部門や情報管理部門のスタッフが該当します。利用提案のレビューや実行管理も担当します。",
+      "データセットを管理・公開する責任者。人事部門や情報管理部門のスタッフが該当します。利用提案のレビューや分析実行管理も担当します。",
     category: "role",
     relatedLinks: [{ label: "データオーナー向けマニュアル", to: "/manual/hr" }],
   },
@@ -48,7 +48,7 @@ const GLOSSARY: GlossaryTerm[] = [
     term: "データ利用者",
     reading: "データりようしゃ",
     description:
-      "公開されたデータセットを活用する研究者・分析者。活用提案を作成してデータオーナーのレビューを受け、承認されると実行リクエストを提出できます。",
+      "公開されたデータセットを活用する研究者・分析者。活用提案を作成してデータオーナーのレビューを受け、承認されると分析実行リクエストを提出できます。",
     category: "role",
     relatedLinks: [{ label: "データ利用者向けマニュアル", to: "/manual/proposer" }],
   },
@@ -56,7 +56,7 @@ const GLOSSARY: GlossaryTerm[] = [
     term: "活用提案",
     reading: "かつようていあん",
     description:
-      "データ利用者がデータセットをどのように使いたいかを記述した申請書。目的・使用するデータ・期待する成果・利用期間などを記載してデータオーナーに提出します。承認されると実行リクエストが可能になります。",
+      "データ利用者がデータセットをどのように使いたいかを記述した申請書。目的・使用するデータ・期待する成果・利用期間などを記載してデータオーナーに提出します。承認されると分析実行リクエストが可能になります。",
     category: "workflow",
     relatedLinks: [
       { label: "マイ提案（利用者）", to: "/proposer/proposals" },
@@ -64,51 +64,51 @@ const GLOSSARY: GlossaryTerm[] = [
     ],
   },
   {
-    term: "実行リクエスト",
-    reading: "じっこうリクエスト",
+    term: "分析実行リクエスト",
+    reading: "ぶんせきじっこうリクエスト",
     description:
       "合成データの生成を依頼する申請。活用提案が承認された後、データ利用者が生成するデータの行数・形式・パラメータなどを指定して提出します。",
     category: "workflow",
     relatedLinks: [
-      { label: "マイ実行（利用者）", to: "/proposer/submissions" },
-      { label: "実行管理（オーナー）", to: "/hr/submissions" },
+      { label: "マイ分析実行（利用者）", to: "/proposer/submissions" },
+      { label: "分析実行管理（オーナー）", to: "/hr/submissions" },
     ],
   },
   {
-    term: "データリクエスト",
-    reading: "データリクエスト",
+    term: "データ公開リクエスト",
+    reading: "データこうかいリクエスト",
     description:
       "まだ存在しないデータセットや、追加してほしいデータの要望をデータオーナーに伝える機能。利用者が必要なデータを明示することで、データオーナーが対応を検討します。",
     category: "workflow",
-    relatedLinks: [{ label: "データリクエスト", to: "/proposer/data-requests" }],
+    relatedLinks: [{ label: "データ公開リクエスト", to: "/proposer/data-requests" }],
   },
   {
     term: "レビュー",
     reading: "レビュー",
     description:
-      "データオーナーが活用提案や実行リクエストの内容を確認し、承認または却下する作業。提案の目的・利用規約への適合性・安全性などを確認します。",
+      "データオーナーが活用提案や分析実行リクエストの内容を確認し、承認または却下する作業。提案の目的・利用規約への適合性・安全性などを確認します。",
     category: "workflow",
     relatedLinks: [
       { label: "提案レビュー（オーナー）", to: "/hr/proposals" },
-      { label: "実行管理（オーナー）", to: "/hr/submissions" },
+      { label: "分析実行管理（オーナー）", to: "/hr/submissions" },
     ],
   },
   {
     term: "ステータス",
     reading: "ステータス",
     description:
-      "提案・実行リクエストの現在の状態。「レビュー待ち」「承認済み」「却下」「実行中」「完了」などがあります。ダッシュボードや各一覧ページで確認できます。",
+      "提案・分析実行リクエストの現在の状態。「レビュー待ち」「承認済み」「却下」「実行中」「完了」などがあります。ダッシュボードや各一覧ページで確認できます。",
     category: "system",
     relatedLinks: [{ label: "ダッシュボード", to: "/dashboard" }],
   },
   {
-    term: "コミュニティ",
-    reading: "コミュニティ",
+    term: "全体の提案",
+    reading: "ぜんたいのていあん",
     description:
       "他のユーザーが公開した活用提案を閲覧・参照できる場所。いいねをつけることができ、注目度の高い提案はダッシュボードの「注目のユースケース」に表示されます。",
     category: "system",
     relatedLinks: [
-      { label: "コミュニティ（利用者）", to: "/proposer/community" },
+      { label: "全体の提案（利用者）", to: "/proposer/community" },
       { label: "ダッシュボード", to: "/dashboard" },
     ],
   },
@@ -139,9 +139,9 @@ const GLOSSARY: GlossaryTerm[] = [
     term: "ユースケース",
     reading: "ユースケース",
     description:
-      "データセットの活用事例・使い方の例。データオーナーがカタログ情報に設定する場合と、コミュニティの活用提案がユースケースとして機能する場合があります。",
+      "データセットの活用事例・使い方の例。データオーナーがカタログ情報に設定する場合と、全体の提案の活用提案がユースケースとして機能する場合があります。",
     category: "data",
-    relatedLinks: [{ label: "コミュニティ（利用者）", to: "/proposer/community" }],
+    relatedLinks: [{ label: "全体の提案（利用者）", to: "/proposer/community" }],
   },
 ];
 
