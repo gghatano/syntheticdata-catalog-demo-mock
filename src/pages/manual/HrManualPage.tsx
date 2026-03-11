@@ -298,7 +298,7 @@ export function HrManualPage() {
       <div className="bg-gray-50 rounded-xl p-6">
         <h2 className="text-lg font-bold text-gray-800 mb-4">❓ よくある質問</h2>
         <div className="space-y-4">
-          [
+          {[
             {
               q: "合成データを生成しないとデータセットを公開できませんか？",
               a: "公開自体は合成データなしでも可能ですが、合成データを事前に生成しておくことを強く推奨します。データ利用者はカタログ情報と合成データを見ながら提案を検討するため、合成データが充実しているほど質の高い提案が集まりやすくなります。",
