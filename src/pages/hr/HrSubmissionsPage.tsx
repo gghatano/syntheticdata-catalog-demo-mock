@@ -60,7 +60,7 @@ export function HrSubmissionsPage() {
                 if (status === "executed_synthetic" || status === "executed_real") {
                   const exec = EXECUTIONS.find((e) => e.submission_id === s.submission_id);
                   return (
-                    <Link to={`/hr/executions/${exec?.execution_id ?? "EXEC0001"}`} className="text-blue-600 hover:underline text-sm">
+                    <Link to={`/hr/executions/${exec?.execution_id ?? "SYNTH-EX001"}`} className="text-blue-600 hover:underline text-sm">
                       結果確認
                     </Link>
                   );
