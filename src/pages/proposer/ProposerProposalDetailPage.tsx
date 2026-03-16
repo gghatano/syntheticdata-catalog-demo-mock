@@ -10,6 +10,29 @@ import { ReviewList } from "../../components/common/ReviewList";
 import { formatDate } from "../../utils/format";
 import { getDatasetName, getUserDisplayName, getProposalLikeCount, getEffectiveProposalStatus } from "../../utils/data";
 
+const proseClasses = "prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800 prose-table:text-sm prose-th:bg-gray-50 prose-th:border prose-th:border-gray-200 prose-th:px-3 prose-th:py-1.5 prose-td:border prose-td:border-gray-200 prose-td:px-3 prose-td:py-1.5";
+
+function CollapsibleSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <section className="bg-white rounded-lg shadow mb-6">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+      >
+        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+        <svg
+          className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {isOpen && <div className="px-6 pb-6 border-t border-gray-100 pt-4">{children}</div>}
+    </section>
+  );
+}
+
 export function ProposerProposalDetailPage() {
   const { id } = useParams<{ id: string }>();
   const proposal = PROPOSALS.find((p) => p.proposal_id === id);
@@ -47,6 +70,7 @@ export function ProposerProposalDetailPage() {
         </button>
       </div>
 
+      {/* 提案情報 */}
       <section className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-3">提案情報</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
@@ -57,25 +81,62 @@ export function ProposerProposalDetailPage() {
         </div>
       </section>
 
+      {/* 概要 */}
       <section className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-3">概要</h2>
         <p className="text-sm text-gray-700">{proposal.summary}</p>
       </section>
 
+      {/* 背景と課題 */}
       <section className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-3">レポート</h2>
-        <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800 prose-table:text-sm prose-th:bg-gray-50 prose-th:border prose-th:border-gray-200 prose-th:px-3 prose-th:py-1.5 prose-td:border prose-td:border-gray-200 prose-td:px-3 prose-td:py-1.5 prose-pre:bg-gray-900 prose-code:text-green-600">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.report}</ReactMarkdown>
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.background}</ReactMarkdown>
         </div>
       </section>
 
+      {/* 期待される効果 */}
       <section className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-3">コード</h2>
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.expected_impact}</ReactMarkdown>
+        </div>
+      </section>
+
+      {/* 分析アプローチ */}
+      <section className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.approach}</ReactMarkdown>
+        </div>
+      </section>
+
+      {/* 結果と提言 */}
+      <section className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.business_results}</ReactMarkdown>
+        </div>
+      </section>
+
+      {/* ネクストステップ */}
+      <section className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.next_steps}</ReactMarkdown>
+        </div>
+      </section>
+
+      {/* 技術詳細（折りたたみ） */}
+      <CollapsibleSection title="技術詳細">
+        <div className={proseClasses}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.technical_detail}</ReactMarkdown>
+        </div>
+      </CollapsibleSection>
+
+      {/* コード（折りたたみ） */}
+      <CollapsibleSection title="コード">
         <pre className="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-x-auto">
           <code>{proposal.code}</code>
         </pre>
-      </section>
+      </CollapsibleSection>
 
+      {/* レビューコメント */}
       <section className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-semibold mb-3">レビューコメント</h2>
         <ReviewList reviews={allReviews} />

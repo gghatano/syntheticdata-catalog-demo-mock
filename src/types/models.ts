@@ -174,8 +174,13 @@ export interface Proposal {
   user_id: string;
   title: string;
   summary: string;
+  background: string;
+  expected_impact: string;
+  approach: string;
+  business_results: string;
+  next_steps: string;
+  technical_detail: string;
   code: string;
-  report: string;
   status: ProposalStatus;
   reviews: ReviewComment[];
   created_at: string;
