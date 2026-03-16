@@ -181,6 +181,7 @@ export interface Proposal {
   next_steps: string;
   technical_detail: string;
   code: string;
+  charts?: DatasetGraph[];
   status: ProposalStatus;
   reviews: ReviewComment[];
   created_at: string;
