@@ -44,7 +44,7 @@ export function CommunityProposalsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">コミュニティ提案</h1>
+      <h1 className="text-2xl font-bold mb-6">全体の提案</h1>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <input

@@ -10,7 +10,7 @@ export function ProposerSubmissionFormPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">新規提出</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">新規分析実行リクエストを作成</h1>
       <div className="bg-white rounded-lg shadow p-6 max-w-2xl">
         <div className="space-y-4">
           <div>
@@ -24,7 +24,7 @@ export function ProposerSubmissionFormPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">タイトル</label>
-            <input type="text" className="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="提出物のタイトル" />
+            <input type="text" className="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="分析実行リクエストのタイトル" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">説明</label>

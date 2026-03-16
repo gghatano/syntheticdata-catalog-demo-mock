@@ -159,6 +159,22 @@ export function DashboardPage() {
         <p className="text-gray-500 mt-1">
           {isHr ? "データセットとレビューの状況を確認しましょう" : "データの活用状況をチェックしましょう"}
         </p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link
+            to="/manual"
+            className="inline-flex items-center gap-1.5 text-sm bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <span>📖</span>
+            操作マニュアルを見る
+          </Link>
+          <Link
+            to={isHr ? "/manual/hr" : "/manual/proposer"}
+            className="inline-flex items-center gap-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <span>{isHr ? "🏢" : "🔍"}</span>
+            {isHr ? "データオーナー向けマニュアル" : "データ利用者向けマニュアル"}
+          </Link>
+        </div>
       </div>
 
       {/* Summary Stat Cards */}
@@ -168,14 +184,14 @@ export function DashboardPage() {
             <StatCard icon={DatabaseIcon} count={DATASETS.length} label="総データセット数" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
             <StatCard icon={CheckIcon} count={publishedDatasets.length} label="公開済み" gradient="bg-gradient-to-br from-green-500 to-green-600" />
             <StatCard icon={ClipboardIcon} count={pendingProposals.length} label="レビュー待ち提案" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
-            <StatCard icon={LightbulbIcon} count={pendingSubmissions.length} label="レビュー待ち提出物" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
+            <StatCard icon={LightbulbIcon} count={pendingSubmissions.length} label="レビュー待ち分析実行" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
           </>
         ) : (
           <>
             <StatCard icon={DatabaseIcon} count={publishedDatasets.length} label="公開データセット" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
             <StatCard icon={LightbulbIcon} count={PROPOSALS.length} label="活用提案" gradient="bg-gradient-to-br from-green-500 to-green-600" />
             <StatCard icon={UserIcon} count={myProposals.length} label="自分の提案" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
-            <StatCard icon={HeartStatIcon} count={communityLikes} label="コミュニティいいね" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
+            <StatCard icon={HeartStatIcon} count={communityLikes} label="全体のいいね" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
           </>
         )}
       </div>
@@ -203,7 +219,7 @@ export function DashboardPage() {
                     <span className="text-sm text-gray-700">{s.title}</span>
                     <span className="text-xs text-gray-400">by {getUserDisplayName(s.user_id)}</span>
                   </div>
-                  <span className="text-xs text-amber-600 font-medium">提出物レビュー</span>
+                  <span className="text-xs text-amber-600 font-medium">分析実行レビュー</span>
                 </Link>
               ))}
             </div>
@@ -229,7 +245,7 @@ export function DashboardPage() {
                     <span className="w-2 h-2 rounded-full bg-amber-400" />
                     <span className="text-sm text-gray-700">{s.title}</span>
                   </div>
-                  <span className="text-xs text-amber-600 font-medium">提出物レビュー待ち</span>
+                  <span className="text-xs text-amber-600 font-medium">分析実行レビュー待ち</span>
                 </Link>
               ))}
             </div>
@@ -318,7 +334,7 @@ export function DashboardPage() {
       {/* Recent Community Proposals */}
       <section>
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          {isHr ? "コミュニティ活動" : "最近の活用提案"}
+          {isHr ? "全体の活動" : "最近の活用提案"}
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
           {recentProposals.map((p) => {
