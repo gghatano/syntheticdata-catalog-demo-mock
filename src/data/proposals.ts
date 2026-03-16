@@ -1,4 +1,4 @@
-import { Proposal } from "../types/models";
+import { DatasetGraph, Proposal } from "../types/models";
 
 export const PROPOSALS: Proposal[] = [
   {
@@ -99,6 +99,36 @@ def main():
 
 if __name__ == "__main__":
     main()`,
+    charts: [
+      {
+        id: "prop001-chart-1",
+        title: "部門別 平均スキルスコア",
+        type: "bar",
+        labels: ["【サンプル】システム開発部", "【サンプル】経営企画部", "【サンプル】法人営業部"],
+        datasets: [
+          {
+            label: "平均スキルスコア",
+            data: [72.3, 81.5, 68.9],
+            backgroundColor: "rgba(59, 130, 246, 0.6)",
+            borderColor: "rgb(59, 130, 246)",
+          },
+        ],
+      },
+      {
+        id: "prop001-chart-2",
+        title: "部門別 スキルスコアのばらつき（標準偏差）",
+        type: "bar",
+        labels: ["【サンプル】システム開発部", "【サンプル】経営企画部", "【サンプル】法人営業部"],
+        datasets: [
+          {
+            label: "標準偏差",
+            data: [15.2, 8.7, 12.1],
+            backgroundColor: "rgba(249, 115, 22, 0.6)",
+            borderColor: "rgb(249, 115, 22)",
+          },
+        ],
+      },
+    ] as DatasetGraph[],
     status: "approved",
     reviews: [
       {
@@ -443,6 +473,41 @@ def main():
 
 if __name__ == "__main__":
     main()`,
+    charts: [
+      {
+        id: "prop004-chart-1",
+        title: "顧客セグメント構成比",
+        type: "doughnut",
+        labels: ["VIP顧客", "アクティブ顧客", "一般顧客", "新規顧客", "休眠顧客"],
+        datasets: [
+          {
+            label: "構成比",
+            data: [12, 28, 20, 25, 15],
+            backgroundColor: [
+              "rgba(239, 68, 68, 0.7)",
+              "rgba(59, 130, 246, 0.7)",
+              "rgba(34, 197, 94, 0.7)",
+              "rgba(168, 85, 247, 0.7)",
+              "rgba(156, 163, 175, 0.7)",
+            ],
+          },
+        ],
+      },
+      {
+        id: "prop004-chart-2",
+        title: "セグメント別 月平均取引額（万円）",
+        type: "bar",
+        labels: ["VIP顧客", "アクティブ顧客", "一般顧客", "新規顧客", "休眠顧客"],
+        datasets: [
+          {
+            label: "月平均取引額（万円）",
+            data: [45, 18, 8, 5, 2],
+            backgroundColor: "rgba(59, 130, 246, 0.6)",
+            borderColor: "rgb(59, 130, 246)",
+          },
+        ],
+      },
+    ] as DatasetGraph[],
     status: "approved",
     reviews: [
       {
@@ -1461,6 +1526,39 @@ def main():
 
 if __name__ == "__main__":
     main()`,
+    charts: [
+      {
+        id: "prop012-chart-1",
+        title: "異常種別の分布",
+        type: "doughnut",
+        labels: ["高額異常", "頻度異常", "パターン異常"],
+        datasets: [
+          {
+            label: "検出件数",
+            data: [68, 45, 39],
+            backgroundColor: [
+              "rgba(239, 68, 68, 0.7)",
+              "rgba(249, 115, 22, 0.7)",
+              "rgba(234, 179, 8, 0.7)",
+            ],
+          },
+        ],
+      },
+      {
+        id: "prop012-chart-2",
+        title: "異常スコア別 検出件数",
+        type: "bar",
+        labels: ["0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1.0"],
+        datasets: [
+          {
+            label: "検出件数",
+            data: [42, 35, 28, 22, 25],
+            backgroundColor: "rgba(239, 68, 68, 0.6)",
+            borderColor: "rgb(239, 68, 68)",
+          },
+        ],
+      },
+    ] as DatasetGraph[],
     status: "approved",
     reviews: [
       {

@@ -16,7 +16,14 @@ export function HrProposalsPage() {
         <DataTable
           columns={[
             { header: "提案ID", accessor: (p) => p.proposal_id },
-            { header: "タイトル", accessor: (p) => p.title },
+            { header: "タイトル", accessor: (p) => (
+              <span className="flex items-center gap-2">
+                {p.title}
+                {p.charts && p.charts.length > 0 && (
+                  <span className="inline-flex items-center bg-indigo-100 text-indigo-700 text-xs px-1.5 py-0.5 rounded font-medium whitespace-nowrap">図表あり</span>
+                )}
+              </span>
+            ) },
             { header: "提案者", accessor: (p) => getUserDisplayName(p.user_id) },
             { header: "データセット", accessor: (p) => getDatasetName(p.dataset_id) },
             { header: "ステータス", accessor: (p) => <StatusBadge status={getEffectiveProposalStatus(state, p)} /> },

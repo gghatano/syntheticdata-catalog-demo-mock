@@ -84,6 +84,9 @@ export function CommunityProposalsPage() {
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h2 className="font-semibold text-gray-900 text-sm leading-snug flex-1">
                     {proposal.title}
+                    {proposal.charts && proposal.charts.length > 0 && (
+                      <span className="ml-2 inline-flex items-center bg-indigo-100 text-indigo-700 text-xs px-1.5 py-0.5 rounded font-medium align-middle">図表あり</span>
+                    )}
                   </h2>
                   <StatusBadge status={status} />
                   {proposal.user_id === state.currentUserId && (

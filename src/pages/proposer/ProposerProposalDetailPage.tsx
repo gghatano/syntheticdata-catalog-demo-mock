@@ -9,6 +9,7 @@ import { StatusBadge } from "../../components/common/StatusBadge";
 import { ReviewList } from "../../components/common/ReviewList";
 import { formatDate } from "../../utils/format";
 import { getDatasetName, getUserDisplayName, getProposalLikeCount, getEffectiveProposalStatus } from "../../utils/data";
+import { ProposalCharts } from "../../components/common/ProposalCharts";
 
 const proseClasses = "prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800 prose-table:text-sm prose-th:bg-gray-50 prose-th:border prose-th:border-gray-200 prose-th:px-3 prose-th:py-1.5 prose-td:border prose-td:border-gray-200 prose-td:px-3 prose-td:py-1.5";
 
@@ -121,6 +122,11 @@ export function ProposerProposalDetailPage() {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{proposal.next_steps}</ReactMarkdown>
         </div>
       </section>
+
+      {/* 分析結果の図表 */}
+      {proposal.charts && proposal.charts.length > 0 && (
+        <ProposalCharts charts={proposal.charts} />
+      )}
 
       {/* 技術詳細（折りたたみ） */}
       <CollapsibleSection title="技術詳細">
