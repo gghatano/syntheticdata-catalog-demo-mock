@@ -10,6 +10,12 @@ export const DEFAULT_DATASET_LIKES: Record<string, number> = {
   "SYNTH-DS008": 19,
   "SYNTH-DS009": 12,
   "SYNTH-DS010": 9,
+  "EXT-DS001": 16,
+  "EXT-DS002": 42,
+  "EXT-DS003": 28,
+  "EXT-DS004": 19,
+  "EXT-DS005": 11,
+  "EXT-DS006": 35,
 };
 
 export const DEFAULT_PROPOSAL_LIKES: Record<string, number> = {

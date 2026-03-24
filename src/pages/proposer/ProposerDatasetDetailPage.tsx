@@ -41,6 +41,7 @@ export function ProposerDatasetDetailPage() {
 
   if (!dataset) return <p className="text-red-500">データセットが見つかりません</p>;
 
+  const isExternal = dataset.source === "external";
   const useCases = getDatasetUseCases(dataset.dataset_id);
   const graphs = getDatasetGraphs(dataset.dataset_id);
   const sampleTables = getDatasetSampleTables(dataset.dataset_id);
@@ -65,7 +66,12 @@ export function ProposerDatasetDetailPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">{dataset.name}</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">{dataset.name}</h1>
+        {isExternal && (
+          <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-medium">社外データ</span>
+        )}
+      </div>
 
       {/* Top section: Basic Info + Quality Report side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
@@ -75,9 +81,17 @@ export function ProposerDatasetDetailPage() {
           <div className="text-sm space-y-2">
             <p><span className="text-gray-500">データセットID:</span> {dataset.dataset_id}</p>
             <p><span className="text-gray-500">説明:</span> {dataset.description}</p>
-            <p><span className="text-gray-500">オーナー:</span> {getUserDisplayName(dataset.owner_user_id)}</p>
+            {isExternal && dataset.provider && (
+              <p><span className="text-gray-500">データプロバイダ:</span> <span className="text-emerald-700 font-medium">{dataset.provider}</span></p>
+            )}
+            {isExternal && dataset.price_info && (
+              <p><span className="text-gray-500">価格情報:</span> <span className="text-orange-600 font-medium">{dataset.price_info}</span></p>
+            )}
+            {!isExternal && (
+              <p><span className="text-gray-500">オーナー:</span> {getUserDisplayName(dataset.owner_user_id)}</p>
+            )}
             <p><span className="text-gray-500">テーブル数:</span> {sampleTables.length}</p>
-            <p><span className="text-gray-500">総レコード数:</span> {qr ? qr.file_reports.reduce((s, f) => s + f.row_count_original, 0).toLocaleString() + "件" : "N/A"}</p>
+            <p><span className="text-gray-500">総レコード数:</span> {qr ? qr.file_reports.reduce((s, f) => s + f.row_count_original, 0).toLocaleString() + "件" : isExternal ? "外部提供データ" : "N/A"}</p>
             <div className="flex gap-2">
               {dataset.tags.map((t) => <span key={t} className="bg-gray-100 px-2 py-0.5 rounded text-xs">{t}</span>)}
             </div>
