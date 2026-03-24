@@ -110,7 +110,7 @@ export function ProposerManualPage() {
           <h1 className="text-3xl font-bold text-gray-800">データ利用者向けマニュアル</h1>
         </div>
         <p className="text-gray-600 text-lg mb-4">
-          データを活用したい研究者・分析者（データ利用者）向けの操作マニュアルです。
+          データを活用したい方（データ利用者）向けの操作マニュアルです。
           データセットの探し方から、合成データの活用までを解説します。
         </p>
         <div className="flex flex-wrap gap-2">

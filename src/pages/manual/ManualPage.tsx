@@ -54,7 +54,7 @@ export function ManualPage() {
             データオーナー向けマニュアル
           </h2>
           <p className="text-gray-500 text-sm flex-1">
-            人事・データ管理部門の方向け。データセットの公開・管理、合成データ生成、
+            データを提供・公開する方向け。データセットの公開・管理、合成データ生成、
             利用提案のレビュー、分析実行管理などの操作手順を解説します。
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -78,7 +78,7 @@ export function ManualPage() {
             データ利用者向けマニュアル
           </h2>
           <p className="text-gray-500 text-sm flex-1">
-            データを活用したい研究者・分析者の方向け。データセットの探し方、
+            データを活用したい方向け。データセットの探し方、
             活用提案の作成、合成データの分析実行リクエストなどを解説します。
           </p>
           <div className="mt-4 flex flex-wrap gap-2">

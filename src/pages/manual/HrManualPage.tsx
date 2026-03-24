@@ -111,7 +111,7 @@ export function HrManualPage() {
           <h1 className="text-3xl font-bold text-gray-800">データオーナー向けマニュアル</h1>
         </div>
         <p className="text-gray-600 text-lg mb-4">
-          人事・データ管理部門の方（データオーナー）向けの操作マニュアルです。
+          データを提供・公開する方（データオーナー）向けの操作マニュアルです。
           データセットの公開・管理から、利用提案のレビューまでを解説します。
         </p>
         <div className="flex flex-wrap gap-2">
