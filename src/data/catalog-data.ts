@@ -929,6 +929,374 @@ export const DS0010_GRAPHS: DatasetGraph[] = [
 ];
 
 // ============================================================
+// ============================================================
+// EXT-DS001: スーパーマーケット店舗マスタデータ
+// ============================================================
+
+export const EXT_DS001_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "stores",
+    description: "スーパーマーケットチェーンの店舗基本情報を管理するマスタテーブル",
+    columns: [
+      { name: "store_id", type: "string", displayName: "店舗ID", description: "店舗を一意に識別するID" },
+      { name: "store_name", type: "string", displayName: "店舗名", description: "店舗の正式名称" },
+      { name: "prefecture", type: "string", displayName: "都道府県", description: "所在都道府県" },
+      { name: "city", type: "string", displayName: "市区町村", description: "所在市区町村" },
+      { name: "area_sqm", type: "integer", displayName: "売場面積(㎡)", description: "売場面積（平方メートル）" },
+      { name: "open_date", type: "date", displayName: "開店日", description: "開店年月日" },
+      { name: "store_type", type: "string", displayName: "店舗タイプ", description: "大型/中型/小型/ミニ" },
+    ],
+    rows: [
+      { store_id: "ST-0001", store_name: "フレッシュマート 新宿店", prefecture: "東京都", city: "新宿区", area_sqm: 3500, open_date: "2005-04-15", store_type: "大型" },
+      { store_id: "ST-0002", store_name: "フレッシュマート 横浜港北店", prefecture: "神奈川県", city: "横浜市港北区", area_sqm: 4200, open_date: "2010-09-01", store_type: "大型" },
+      { store_id: "ST-0003", store_name: "フレッシュマート 大宮店", prefecture: "埼玉県", city: "さいたま市大宮区", area_sqm: 2800, open_date: "2015-03-20", store_type: "中型" },
+      { store_id: "ST-0004", store_name: "フレッシュマート 船橋店", prefecture: "千葉県", city: "船橋市", area_sqm: 1500, open_date: "2020-06-10", store_type: "小型" },
+      { store_id: "ST-0005", store_name: "フレッシュマート 梅田店", prefecture: "大阪府", city: "大阪市北区", area_sqm: 5200, open_date: "2008-11-03", store_type: "大型" },
+    ],
+    primaryKey: ["store_id"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS001_USE_CASES: DatasetUseCase[] = [
+  { title: "出店計画分析", description: "既存店舗の立地特性と売上の関係を分析し、新規出店候補地の選定に活用する。", relatedGraphId: "ext-graph-stores-pref" },
+  { title: "既存店売上予測", description: "店舗属性（面積・タイプ・立地）から既存店の売上ポテンシャルを推定する。", relatedGraphId: null },
+  { title: "商圏重複分析", description: "自社店舗間の商圏重複度を評価し、カニバリゼーションの影響を定量化する。", relatedGraphId: "ext-graph-stores-type" },
+];
+
+export const EXT_DS001_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-stores-pref",
+    title: "都道府県別店舗数",
+    type: "bar",
+    labels: ["東京都", "神奈川県", "大阪府", "愛知県", "埼玉県", "千葉県", "兵庫県", "福岡県", "北海道", "その他"],
+    datasets: [{ label: "店舗数", data: [320, 210, 190, 150, 140, 130, 110, 95, 85, 1070], backgroundColor: "rgba(16, 185, 129, 0.6)", borderColor: "rgb(16, 185, 129)" }],
+  },
+  {
+    id: "ext-graph-stores-type",
+    title: "店舗タイプ分布",
+    type: "pie",
+    labels: ["大型", "中型", "小型", "ミニ"],
+    datasets: [{ label: "店舗数", data: [450, 850, 750, 450], backgroundColor: ["rgba(16, 185, 129, 0.7)", "rgba(59, 130, 246, 0.7)", "rgba(251, 191, 36, 0.7)", "rgba(239, 68, 68, 0.7)"] }],
+  },
+];
+
+// ============================================================
+// EXT-DS002: POSトランザクションデータ
+// ============================================================
+
+export const EXT_DS002_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "pos_transactions",
+    description: "POSレジから収集された個別取引レコード",
+    columns: [
+      { name: "txn_id", type: "string", displayName: "取引ID", description: "取引を一意に識別するID" },
+      { name: "store_id", type: "string", displayName: "店舗ID", description: "取引が発生した店舗のID" },
+      { name: "txn_date", type: "date", displayName: "取引日", description: "取引発生日" },
+      { name: "txn_time", type: "string", displayName: "取引時刻", description: "取引発生時刻(HH:MM)" },
+      { name: "product_id", type: "string", displayName: "商品ID", description: "販売商品のID" },
+      { name: "product_name", type: "string", displayName: "商品名", description: "販売商品名" },
+      { name: "category", type: "string", displayName: "カテゴリ", description: "商品カテゴリ" },
+      { name: "quantity", type: "integer", displayName: "数量", description: "販売数量" },
+      { name: "unit_price", type: "integer", displayName: "単価(円)", description: "商品単価" },
+      { name: "amount", type: "integer", displayName: "金額(円)", description: "合計金額" },
+    ],
+    rows: [
+      { txn_id: "TXN-20240101-00001", store_id: "ST-0001", txn_date: "2024-01-01", txn_time: "10:15", product_id: "PRD-001", product_name: "国産牛肉ロース", category: "精肉", quantity: 1, unit_price: 1280, amount: 1280 },
+      { txn_id: "TXN-20240101-00002", store_id: "ST-0001", txn_date: "2024-01-01", txn_time: "10:15", product_id: "PRD-102", product_name: "有機キャベツ", category: "青果", quantity: 1, unit_price: 198, amount: 198 },
+      { txn_id: "TXN-20240101-00003", store_id: "ST-0002", txn_date: "2024-01-01", txn_time: "11:30", product_id: "PRD-205", product_name: "食パン 6枚切", category: "ベーカリー", quantity: 2, unit_price: 158, amount: 316 },
+      { txn_id: "TXN-20240101-00004", store_id: "ST-0003", txn_date: "2024-01-01", txn_time: "14:20", product_id: "PRD-310", product_name: "牛乳 1L", category: "乳製品", quantity: 1, unit_price: 228, amount: 228 },
+      { txn_id: "TXN-20240101-00005", store_id: "ST-0001", txn_date: "2024-01-01", txn_time: "16:45", product_id: "PRD-450", product_name: "缶ビール 6本パック", category: "飲料・酒類", quantity: 1, unit_price: 980, amount: 980 },
+    ],
+    primaryKey: ["txn_id"],
+    foreignKeys: [
+      { columns: ["store_id"], referenceTable: "stores", referenceColumns: ["store_id"] },
+      { columns: ["product_id"], referenceTable: "products", referenceColumns: ["product_id"] },
+    ],
+  },
+  {
+    tableName: "products",
+    description: "商品マスタ情報",
+    columns: [
+      { name: "product_id", type: "string", displayName: "商品ID", description: "商品を一意に識別するID" },
+      { name: "product_name", type: "string", displayName: "商品名", description: "商品の正式名称" },
+      { name: "category", type: "string", displayName: "カテゴリ", description: "大カテゴリ" },
+      { name: "subcategory", type: "string", displayName: "サブカテゴリ", description: "小カテゴリ" },
+      { name: "brand", type: "string", displayName: "ブランド", description: "ブランド・メーカー名" },
+    ],
+    rows: [
+      { product_id: "PRD-001", product_name: "国産牛肉ロース", category: "精肉", subcategory: "牛肉", brand: "国産" },
+      { product_id: "PRD-102", product_name: "有機キャベツ", category: "青果", subcategory: "葉物", brand: "有機農園" },
+      { product_id: "PRD-205", product_name: "食パン 6枚切", category: "ベーカリー", subcategory: "食パン", brand: "パン工房" },
+      { product_id: "PRD-310", product_name: "牛乳 1L", category: "乳製品", subcategory: "牛乳", brand: "酪農牧場" },
+      { product_id: "PRD-450", product_name: "缶ビール 6本パック", category: "飲料・酒類", subcategory: "ビール", brand: "日本ビール" },
+    ],
+    primaryKey: ["product_id"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS002_USE_CASES: DatasetUseCase[] = [
+  { title: "商品需要予測", description: "過去の販売データと外部要因（天候・イベント等）を組み合わせた商品別需要予測モデルの構築。在庫最適化と廃棄ロス削減に活用。", relatedGraphId: "ext-graph-pos-monthly" },
+  { title: "バスケット分析", description: "同一レシート内の商品組み合わせを分析し、クロスセル機会の発見やレイアウト最適化に活用。", relatedGraphId: "ext-graph-pos-category" },
+  { title: "価格弾力性分析", description: "価格変更時の販売数量変動から商品別の価格弾力性を推定し、最適価格戦略を立案。", relatedGraphId: null },
+  { title: "店舗間比較", description: "店舗属性・立地条件別の売上パフォーマンスを比較分析し、ベストプラクティスを共有。", relatedGraphId: "ext-graph-pos-hourly" },
+];
+
+export const EXT_DS002_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-pos-category",
+    title: "カテゴリ別売上構成",
+    type: "doughnut",
+    labels: ["青果", "精肉", "鮮魚", "乳製品", "ベーカリー", "飲料・酒類", "惣菜", "日用品", "その他"],
+    datasets: [{ label: "売上構成比", data: [15, 18, 12, 8, 7, 14, 11, 9, 6], backgroundColor: ["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16", "#9ca3af"] }],
+  },
+  {
+    id: "ext-graph-pos-hourly",
+    title: "時間帯別トランザクション数",
+    type: "bar",
+    labels: ["8時", "9時", "10時", "11時", "12時", "13時", "14時", "15時", "16時", "17時", "18時", "19時", "20時"],
+    datasets: [{ label: "トランザクション数", data: [800, 1500, 2800, 3200, 2500, 1800, 2200, 2600, 3500, 4200, 4800, 3500, 1800], backgroundColor: "rgba(16, 185, 129, 0.6)", borderColor: "rgb(16, 185, 129)" }],
+  },
+  {
+    id: "ext-graph-pos-monthly",
+    title: "月別売上推移",
+    type: "line",
+    labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+    datasets: [{ label: "売上(百万円)", data: [285, 260, 290, 275, 280, 295, 310, 305, 285, 290, 300, 340], backgroundColor: "rgba(16, 185, 129, 0.2)", borderColor: "rgb(16, 185, 129)", tension: 0.3 }],
+  },
+];
+
+// ============================================================
+// EXT-DS003: 消費者購買行動パネルデータ
+// ============================================================
+
+export const EXT_DS003_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "panel_members",
+    description: "パネル調査に参加する消費者の属性情報",
+    columns: [
+      { name: "member_id", type: "string", displayName: "会員ID", description: "パネル会員の一意識別ID" },
+      { name: "age_group", type: "string", displayName: "年代", description: "年齢層（20代/30代/40代/50代/60代以上）" },
+      { name: "gender", type: "string", displayName: "性別", description: "性別" },
+      { name: "household_size", type: "integer", displayName: "世帯人数", description: "同居世帯人数" },
+      { name: "income_range", type: "string", displayName: "年収帯", description: "世帯年収帯" },
+      { name: "prefecture", type: "string", displayName: "居住都道府県", description: "居住地の都道府県" },
+    ],
+    rows: [
+      { member_id: "PNL-00001", age_group: "30代", gender: "女性", household_size: 3, income_range: "500-700万円", prefecture: "東京都" },
+      { member_id: "PNL-00002", age_group: "40代", gender: "男性", household_size: 4, income_range: "700-1000万円", prefecture: "神奈川県" },
+      { member_id: "PNL-00003", age_group: "20代", gender: "女性", household_size: 1, income_range: "300-500万円", prefecture: "大阪府" },
+      { member_id: "PNL-00004", age_group: "50代", gender: "男性", household_size: 2, income_range: "500-700万円", prefecture: "愛知県" },
+      { member_id: "PNL-00005", age_group: "60代以上", gender: "女性", household_size: 2, income_range: "300-500万円", prefecture: "福岡県" },
+    ],
+    primaryKey: ["member_id"],
+    foreignKeys: [],
+  },
+  {
+    tableName: "purchase_history",
+    description: "パネル会員の購買履歴データ",
+    columns: [
+      { name: "purchase_id", type: "string", displayName: "購買ID", description: "購買記録の一意識別ID" },
+      { name: "member_id", type: "string", displayName: "会員ID", description: "購買者のパネル会員ID" },
+      { name: "purchase_date", type: "date", displayName: "購買日", description: "購買日" },
+      { name: "store_type", type: "string", displayName: "店舗タイプ", description: "購買した店舗の種類" },
+      { name: "category", type: "string", displayName: "カテゴリ", description: "購入商品カテゴリ" },
+      { name: "amount", type: "integer", displayName: "金額(円)", description: "購買金額" },
+    ],
+    rows: [
+      { purchase_id: "PUR-000001", member_id: "PNL-00001", purchase_date: "2024-12-01", store_type: "スーパー", category: "食品", amount: 3500 },
+      { purchase_id: "PUR-000002", member_id: "PNL-00001", purchase_date: "2024-12-03", store_type: "ドラッグストア", category: "日用品", amount: 1200 },
+      { purchase_id: "PUR-000003", member_id: "PNL-00002", purchase_date: "2024-12-01", store_type: "コンビニ", category: "食品", amount: 850 },
+      { purchase_id: "PUR-000004", member_id: "PNL-00003", purchase_date: "2024-12-02", store_type: "EC", category: "ファッション", amount: 5800 },
+      { purchase_id: "PUR-000005", member_id: "PNL-00004", purchase_date: "2024-12-01", store_type: "スーパー", category: "飲料・酒類", amount: 2400 },
+    ],
+    primaryKey: ["purchase_id"],
+    foreignKeys: [
+      { columns: ["member_id"], referenceTable: "panel_members", referenceColumns: ["member_id"] },
+    ],
+  },
+];
+
+export const EXT_DS003_USE_CASES: DatasetUseCase[] = [
+  { title: "ターゲットセグメント分析", description: "デモグラフィック属性と購買パターンからターゲット顧客セグメントを特定し、マーケティング戦略を最適化する。", relatedGraphId: "ext-graph-panel-age" },
+  { title: "クロスセル分析", description: "カテゴリ間の購買相関を分析し、効果的なクロスセル施策を立案する。", relatedGraphId: "ext-graph-panel-category" },
+];
+
+export const EXT_DS003_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-panel-age",
+    title: "年代別月間購買金額",
+    type: "bar",
+    labels: ["20代", "30代", "40代", "50代", "60代以上"],
+    datasets: [{ label: "月間平均購買金額(円)", data: [35000, 58000, 72000, 65000, 48000], backgroundColor: "rgba(16, 185, 129, 0.6)", borderColor: "rgb(16, 185, 129)" }],
+  },
+  {
+    id: "ext-graph-panel-category",
+    title: "カテゴリ別支出割合",
+    type: "pie",
+    labels: ["食品", "飲料・酒類", "日用品", "ファッション", "家電", "その他"],
+    datasets: [{ label: "支出割合", data: [35, 12, 18, 15, 10, 10], backgroundColor: ["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#9ca3af"] }],
+  },
+];
+
+// ============================================================
+// EXT-DS004: 地域別人口統計・商圏データ
+// ============================================================
+
+export const EXT_DS004_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "area_demographics",
+    description: "市区町村別の人口統計・商圏指標データ",
+    columns: [
+      { name: "area_code", type: "string", displayName: "地域コード", description: "地域を一意に識別するコード" },
+      { name: "prefecture", type: "string", displayName: "都道府県", description: "都道府県名" },
+      { name: "city", type: "string", displayName: "市区町村", description: "市区町村名" },
+      { name: "population", type: "integer", displayName: "人口", description: "推計人口" },
+      { name: "households", type: "integer", displayName: "世帯数", description: "世帯数" },
+      { name: "avg_income", type: "integer", displayName: "平均世帯年収(万円)", description: "平均世帯年収" },
+      { name: "commercial_area_flag", type: "boolean", displayName: "商業エリア", description: "商業集積地フラグ" },
+    ],
+    rows: [
+      { area_code: "13101", prefecture: "東京都", city: "千代田区", population: 67900, households: 38500, avg_income: 850, commercial_area_flag: true },
+      { area_code: "13102", prefecture: "東京都", city: "中央区", population: 175900, households: 102000, avg_income: 780, commercial_area_flag: true },
+      { area_code: "14101", prefecture: "神奈川県", city: "横浜市鶴見区", population: 296000, households: 142000, avg_income: 520, commercial_area_flag: false },
+      { area_code: "27102", prefecture: "大阪府", city: "大阪市北区", population: 143000, households: 85000, avg_income: 620, commercial_area_flag: true },
+      { area_code: "23101", prefecture: "愛知県", city: "名古屋市千種区", population: 167000, households: 88000, avg_income: 580, commercial_area_flag: false },
+    ],
+    primaryKey: ["area_code"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS004_USE_CASES: DatasetUseCase[] = [
+  { title: "新規出店候補地評価", description: "人口密度・世帯年収・商業エリア特性を総合的に評価し、出店候補地をスコアリングする。", relatedGraphId: "ext-graph-demo-income" },
+  { title: "マーケットサイジング", description: "商圏内の人口・世帯構成から市場規模を推定し、売上ポテンシャルを算出する。", relatedGraphId: "ext-graph-demo-pop" },
+];
+
+export const EXT_DS004_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-demo-income",
+    title: "都道府県別平均世帯年収",
+    type: "bar",
+    labels: ["東京都", "神奈川県", "愛知県", "大阪府", "兵庫県", "埼玉県", "千葉県", "福岡県", "北海道", "宮城県"],
+    datasets: [{ label: "平均世帯年収(万円)", data: [720, 580, 550, 520, 510, 500, 490, 460, 430, 440], backgroundColor: "rgba(16, 185, 129, 0.6)", borderColor: "rgb(16, 185, 129)" }],
+  },
+  {
+    id: "ext-graph-demo-pop",
+    title: "商圏人口規模別エリア数",
+    type: "bar",
+    labels: ["1万未満", "1-5万", "5-10万", "10-50万", "50万以上"],
+    datasets: [{ label: "エリア数", data: [600, 550, 350, 300, 100], backgroundColor: "rgba(59, 130, 246, 0.6)", borderColor: "rgb(59, 130, 246)" }],
+  },
+];
+
+// ============================================================
+// EXT-DS005: 天候・気象データ（日次）
+// ============================================================
+
+export const EXT_DS005_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "daily_weather",
+    description: "全国主要都市の日次気象観測データ",
+    columns: [
+      { name: "date", type: "date", displayName: "日付", description: "観測日" },
+      { name: "prefecture", type: "string", displayName: "都道府県", description: "観測地点の都道府県" },
+      { name: "city", type: "string", displayName: "観測地点", description: "気象観測地点名" },
+      { name: "max_temp", type: "number", displayName: "最高気温(℃)", description: "日中最高気温" },
+      { name: "min_temp", type: "number", displayName: "最低気温(℃)", description: "日中最低気温" },
+      { name: "precipitation", type: "number", displayName: "降水量(mm)", description: "24時間累計降水量" },
+      { name: "weather_type", type: "string", displayName: "天候", description: "天候タイプ（晴/曇/雨/雪/その他）" },
+    ],
+    rows: [
+      { date: "2024-07-15", prefecture: "東京都", city: "東京", max_temp: 34.2, min_temp: 26.1, precipitation: 0, weather_type: "晴" },
+      { date: "2024-07-15", prefecture: "大阪府", city: "大阪", max_temp: 35.8, min_temp: 27.3, precipitation: 0, weather_type: "晴" },
+      { date: "2024-01-15", prefecture: "北海道", city: "札幌", max_temp: -2.1, min_temp: -8.5, precipitation: 12.5, weather_type: "雪" },
+      { date: "2024-06-20", prefecture: "東京都", city: "東京", max_temp: 28.5, min_temp: 22.0, precipitation: 35.0, weather_type: "雨" },
+      { date: "2024-10-10", prefecture: "愛知県", city: "名古屋", max_temp: 22.3, min_temp: 14.5, precipitation: 0, weather_type: "曇" },
+    ],
+    primaryKey: ["date", "city"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS005_USE_CASES: DatasetUseCase[] = [
+  { title: "売上への天候影響分析", description: "天候パターンと日別売上の相関を分析し、天候に応じた需要変動を定量化する。", relatedGraphId: "ext-graph-weather-temp" },
+  { title: "需要予測モデルの特徴量", description: "気象データを需要予測モデルの説明変数として組み込み、予測精度を向上させる。", relatedGraphId: "ext-graph-weather-type" },
+];
+
+export const EXT_DS005_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-weather-temp",
+    title: "月別平均気温推移（東京）",
+    type: "line",
+    labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+    datasets: [
+      { label: "最高気温", data: [10.2, 11.0, 14.8, 20.5, 25.2, 27.8, 31.5, 32.8, 29.2, 23.5, 17.8, 12.5], borderColor: "rgb(239, 68, 68)", backgroundColor: "rgba(239, 68, 68, 0.1)", tension: 0.3 },
+      { label: "最低気温", data: [1.5, 2.2, 5.8, 11.2, 16.0, 20.5, 24.8, 25.5, 22.0, 15.8, 9.5, 3.8], borderColor: "rgb(59, 130, 246)", backgroundColor: "rgba(59, 130, 246, 0.1)", tension: 0.3 },
+    ],
+  },
+  {
+    id: "ext-graph-weather-type",
+    title: "天候タイプ別日数（年間）",
+    type: "bar",
+    labels: ["晴", "曇", "雨", "雪", "その他"],
+    datasets: [{ label: "日数", data: [180, 95, 65, 15, 10], backgroundColor: ["rgba(251, 191, 36, 0.7)", "rgba(156, 163, 175, 0.7)", "rgba(59, 130, 246, 0.7)", "rgba(147, 197, 253, 0.7)", "rgba(209, 213, 219, 0.7)"] }],
+  },
+];
+
+// ============================================================
+// EXT-DS006: ECサイト商品レビュー・評価データ
+// ============================================================
+
+export const EXT_DS006_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "product_reviews",
+    description: "ECサイトの商品レビュー・評価データ",
+    columns: [
+      { name: "review_id", type: "string", displayName: "レビューID", description: "レビューの一意識別ID" },
+      { name: "product_id", type: "string", displayName: "商品ID", description: "対象商品のID" },
+      { name: "product_name", type: "string", displayName: "商品名", description: "対象商品名" },
+      { name: "category", type: "string", displayName: "カテゴリ", description: "商品カテゴリ" },
+      { name: "rating", type: "integer", displayName: "評価", description: "1-5の5段階評価" },
+      { name: "review_text", type: "string", displayName: "レビュー本文", description: "レビューのテキスト" },
+      { name: "review_date", type: "date", displayName: "投稿日", description: "レビュー投稿日" },
+      { name: "helpful_count", type: "integer", displayName: "参考になった数", description: "「参考になった」の投票数" },
+    ],
+    rows: [
+      { review_id: "REV-00001", product_id: "EC-PRD-001", product_name: "ワイヤレスイヤホン X200", category: "家電", rating: 5, review_text: "音質が素晴らしく、ノイズキャンセリングも優秀です。", review_date: "2024-11-15", helpful_count: 42 },
+      { review_id: "REV-00002", product_id: "EC-PRD-002", product_name: "オーガニック洗顔フォーム", category: "コスメ", rating: 4, review_text: "肌に優しく、泡立ちも良いです。コスパも良い。", review_date: "2024-11-20", helpful_count: 18 },
+      { review_id: "REV-00003", product_id: "EC-PRD-003", product_name: "スニーカー エアフロー", category: "ファッション", rating: 3, review_text: "デザインは良いが、少しサイズが小さめ。", review_date: "2024-12-01", helpful_count: 8 },
+      { review_id: "REV-00004", product_id: "EC-PRD-004", product_name: "プロテインバー チョコ味", category: "食品", rating: 4, review_text: "味が美味しく、持ち運びにも便利。", review_date: "2024-12-05", helpful_count: 25 },
+      { review_id: "REV-00005", product_id: "EC-PRD-005", product_name: "ステンレス水筒 500ml", category: "キッチン", rating: 5, review_text: "保温力が抜群。朝入れたコーヒーが夕方でも温かい。", review_date: "2024-12-10", helpful_count: 56 },
+    ],
+    primaryKey: ["review_id"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS006_USE_CASES: DatasetUseCase[] = [
+  { title: "商品改善インサイト", description: "レビューテキストの感情分析・トピック抽出により、商品改善ポイントを自動的に特定する。", relatedGraphId: "ext-graph-review-rating" },
+  { title: "競合分析", description: "カテゴリ別の評価傾向を分析し、自社商品と競合商品のポジショニングを可視化する。", relatedGraphId: "ext-graph-review-category" },
+];
+
+export const EXT_DS006_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-review-category",
+    title: "カテゴリ別平均レーティング",
+    type: "bar",
+    labels: ["家電", "コスメ", "ファッション", "食品", "キッチン", "書籍", "スポーツ", "ペット用品"],
+    datasets: [{ label: "平均レーティング", data: [4.1, 3.9, 3.7, 4.0, 4.2, 4.3, 3.8, 4.0], backgroundColor: "rgba(16, 185, 129, 0.6)", borderColor: "rgb(16, 185, 129)" }],
+  },
+  {
+    id: "ext-graph-review-rating",
+    title: "評価分布",
+    type: "doughnut",
+    labels: ["1つ星", "2つ星", "3つ星", "4つ星", "5つ星"],
+    datasets: [{ label: "レビュー数", data: [5000, 8000, 20000, 35000, 32000], backgroundColor: ["#ef4444", "#f59e0b", "#fbbf24", "#84cc16", "#10b981"] }],
+  },
+];
+
 // データセットIDとカタログデータのマッピング
 // ============================================================
 
@@ -947,4 +1315,10 @@ export const CATALOG_DATA: Record<string, {
   "SYNTH-DS008": { sampleTables: DS0008_SAMPLE_TABLES, useCases: DS0008_USE_CASES, graphs: DS0008_GRAPHS },
   "SYNTH-DS009": { sampleTables: DS0009_SAMPLE_TABLES, useCases: DS0009_USE_CASES, graphs: DS0009_GRAPHS },
   "SYNTH-DS010": { sampleTables: DS0010_SAMPLE_TABLES, useCases: DS0010_USE_CASES, graphs: DS0010_GRAPHS },
+  "EXT-DS001": { sampleTables: EXT_DS001_SAMPLE_TABLES, useCases: EXT_DS001_USE_CASES, graphs: EXT_DS001_GRAPHS },
+  "EXT-DS002": { sampleTables: EXT_DS002_SAMPLE_TABLES, useCases: EXT_DS002_USE_CASES, graphs: EXT_DS002_GRAPHS },
+  "EXT-DS003": { sampleTables: EXT_DS003_SAMPLE_TABLES, useCases: EXT_DS003_USE_CASES, graphs: EXT_DS003_GRAPHS },
+  "EXT-DS004": { sampleTables: EXT_DS004_SAMPLE_TABLES, useCases: EXT_DS004_USE_CASES, graphs: EXT_DS004_GRAPHS },
+  "EXT-DS005": { sampleTables: EXT_DS005_SAMPLE_TABLES, useCases: EXT_DS005_USE_CASES, graphs: EXT_DS005_GRAPHS },
+  "EXT-DS006": { sampleTables: EXT_DS006_SAMPLE_TABLES, useCases: EXT_DS006_USE_CASES, graphs: EXT_DS006_GRAPHS },
 };

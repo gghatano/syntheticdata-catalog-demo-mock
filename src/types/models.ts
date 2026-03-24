@@ -1,5 +1,7 @@
 export type UserRole = "hr" | "proposer" | "admin";
 
+export type DataSource = "internal" | "external";
+
 export type FileType = "employee_master" | "project_allocation" | "working_hours";
 
 export type SubmissionStatus =
@@ -136,6 +138,10 @@ export interface Dataset {
   sampleTables?: SampleTable[];
   useCases?: DatasetUseCase[];
   graphs?: DatasetGraph[];
+  // 社内/社外データ区分
+  source?: DataSource;
+  provider?: string;
+  price_info?: string;
 }
 
 export interface Submission {
