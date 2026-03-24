@@ -15,7 +15,7 @@ const GLOSSARY: GlossaryTerm[] = [
     description:
       "実際の個人情報や機密情報を含まないよう、統計的な性質を保ちながら人工的に生成されたデータ。実データの代わりに分析・研究に使用でき、プライバシーリスクを大幅に低減できます。",
     category: "data",
-    relatedLinks: [{ label: "データセット一覧（利用者）", to: "/proposer/datasets" }],
+    relatedLinks: [{ label: "データセット一覧（利用者）", to: "/datasets" }],
   },
   {
     term: "データセット",
@@ -24,8 +24,8 @@ const GLOSSARY: GlossaryTerm[] = [
       "本システムで管理される、合成データの集まり。複数のテーブル（表）から構成されることもあります。データオーナーが管理し、公開されると利用者が閲覧・活用提案できるようになります。",
     category: "data",
     relatedLinks: [
-      { label: "データセット管理（オーナー）", to: "/hr/datasets" },
-      { label: "データセット一覧（利用者）", to: "/proposer/datasets" },
+      { label: "データセット管理（オーナー）", to: "/datasets" },
+      { label: "データセット一覧（利用者）", to: "/datasets" },
     ],
   },
   {
@@ -34,7 +34,7 @@ const GLOSSARY: GlossaryTerm[] = [
     description:
       "データセットの説明・タグ・利用規約・テーブル構成・ユースケース例など、データセットの内容を説明するメタ情報。データオーナーが設定・編集します。",
     category: "data",
-    relatedLinks: [{ label: "カタログ編集（オーナー）", to: "/hr/datasets" }],
+    relatedLinks: [{ label: "カタログ編集（オーナー）", to: "/datasets" }],
   },
   {
     term: "データオーナー",
@@ -59,8 +59,8 @@ const GLOSSARY: GlossaryTerm[] = [
       "データ利用者がデータセットをどのように使いたいかを記述した申請書。目的・使用するデータ・期待する成果・利用期間などを記載してデータオーナーに提出します。承認されると分析実行リクエストが可能になります。",
     category: "workflow",
     relatedLinks: [
-      { label: "マイ提案（利用者）", to: "/proposer/proposals" },
-      { label: "提案レビュー（オーナー）", to: "/hr/proposals" },
+      { label: "マイ提案（利用者）", to: "/proposals" },
+      { label: "提案レビュー（オーナー）", to: "/proposals" },
     ],
   },
   {
@@ -70,8 +70,8 @@ const GLOSSARY: GlossaryTerm[] = [
       "合成データの生成を依頼する申請。活用提案が承認された後、データ利用者が生成するデータの行数・形式・パラメータなどを指定して提出します。",
     category: "workflow",
     relatedLinks: [
-      { label: "マイ分析実行（利用者）", to: "/proposer/submissions" },
-      { label: "分析実行管理（オーナー）", to: "/hr/submissions" },
+      { label: "マイ分析実行（利用者）", to: "/submissions" },
+      { label: "分析実行管理（オーナー）", to: "/submissions" },
     ],
   },
   {
@@ -80,7 +80,7 @@ const GLOSSARY: GlossaryTerm[] = [
     description:
       "まだ存在しないデータセットや、追加してほしいデータの要望をデータオーナーに伝える機能。利用者が必要なデータを明示することで、データオーナーが対応を検討します。",
     category: "workflow",
-    relatedLinks: [{ label: "データ公開リクエスト", to: "/proposer/data-requests" }],
+    relatedLinks: [{ label: "データ公開リクエスト", to: "/data-requests" }],
   },
   {
     term: "レビュー",
@@ -89,8 +89,8 @@ const GLOSSARY: GlossaryTerm[] = [
       "データオーナーが活用提案や分析実行リクエストの内容を確認し、承認または却下する作業。提案の目的・利用規約への適合性・安全性などを確認します。",
     category: "workflow",
     relatedLinks: [
-      { label: "提案レビュー（オーナー）", to: "/hr/proposals" },
-      { label: "分析実行管理（オーナー）", to: "/hr/submissions" },
+      { label: "提案レビュー（オーナー）", to: "/proposals" },
+      { label: "分析実行管理（オーナー）", to: "/submissions" },
     ],
   },
   {
@@ -108,7 +108,7 @@ const GLOSSARY: GlossaryTerm[] = [
       "他のユーザーが公開した活用提案を閲覧・参照できる場所。いいねをつけることができ、注目度の高い提案はダッシュボードの「注目のユースケース」に表示されます。",
     category: "system",
     relatedLinks: [
-      { label: "全体の提案（利用者）", to: "/proposer/community" },
+      { label: "全体の提案（利用者）", to: "/community" },
       { label: "ダッシュボード", to: "/dashboard" },
     ],
   },
@@ -133,7 +133,7 @@ const GLOSSARY: GlossaryTerm[] = [
     description:
       "データセットの利用条件・禁止事項・注意点などを定めたルール。データオーナーが設定し、利用者は必ず内容を確認した上でデータを活用する必要があります。",
     category: "data",
-    relatedLinks: [{ label: "データセット一覧（利用者）", to: "/proposer/datasets" }],
+    relatedLinks: [{ label: "データセット一覧（利用者）", to: "/datasets" }],
   },
   {
     term: "ユースケース",
@@ -141,7 +141,7 @@ const GLOSSARY: GlossaryTerm[] = [
     description:
       "データセットの活用事例・使い方の例。データオーナーがカタログ情報に設定する場合と、全体の提案の活用提案がユースケースとして機能する場合があります。",
     category: "data",
-    relatedLinks: [{ label: "全体の提案（利用者）", to: "/proposer/community" }],
+    relatedLinks: [{ label: "全体の提案（利用者）", to: "/community" }],
   },
 ];
 

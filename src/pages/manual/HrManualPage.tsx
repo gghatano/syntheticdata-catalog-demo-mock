@@ -151,7 +151,7 @@ export function HrManualPage() {
           <OperationItem
             label="データセット一覧を見る"
             detail="「データセット」メニューから全データセットの一覧を確認できます。公開状態も一目でわかります。"
-            link="/hr/datasets"
+            link="/datasets"
           />
           <OperationItem
             label="データセットの詳細を確認する"
@@ -212,7 +212,7 @@ export function HrManualPage() {
           <OperationItem
             label="合成データを生成する"
             detail="データセット詳細ページの「合成データ生成」ボタンから生成を実行します。生成には数秒〜数分かかる場合があります。"
-            link="/hr/datasets"
+            link="/datasets"
           />
           <OperationItem
             label="生成した合成データを確認する"
@@ -246,7 +246,7 @@ export function HrManualPage() {
           <OperationItem
             label="提案一覧を確認する"
             detail="「提案レビュー」メニューから、提出された全提案を確認できます。ステータスで「レビュー待ち」を絞り込めます。"
-            link="/hr/proposals"
+            link="/proposals"
           />
           <OperationItem
             label="提案の詳細を確認する"
@@ -281,7 +281,7 @@ export function HrManualPage() {
           <OperationItem
             label="分析実行一覧を確認する"
             detail="「分析実行管理」メニューから、すべての分析実行リクエストの状況を確認できます。"
-            link="/hr/submissions"
+            link="/submissions"
           />
           <OperationItem
             label="分析実行の詳細を確認する"

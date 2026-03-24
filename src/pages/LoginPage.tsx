@@ -40,7 +40,7 @@ export function LoginPage() {
               <option value="">-- 選択してください --</option>
               {USERS.map((u) => (
                 <option key={u.user_id} value={u.user_id}>
-                  {u.display_name}（{u.role === "hr" ? "データオーナー" : "提案者"} / {u.department}）
+                  {u.display_name}（{u.department}）
                 </option>
               ))}
             </select>

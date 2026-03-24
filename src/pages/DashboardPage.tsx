@@ -61,12 +61,6 @@ const LightbulbIcon = (
   </svg>
 );
 
-const UserIcon = (
-  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-  </svg>
-);
-
 const HeartStatIcon = (
   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -76,12 +70,6 @@ const HeartStatIcon = (
 const ClipboardIcon = (
   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-  </svg>
-);
-
-const CheckIcon = (
-  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
 
@@ -111,8 +99,6 @@ export function DashboardPage() {
   };
 
   const publishedDatasets = getPublishedDatasets(state);
-  const isHr = user.role === "hr";
-  const basePath = isHr ? "/hr" : "/proposer";
 
   // Shared: recent published datasets sorted by created_at desc
   const recentDatasets = [...publishedDatasets]
@@ -129,23 +115,37 @@ export function DashboardPage() {
     .sort((a, b) => getProposalLikeCount(state, b.proposal_id) - getProposalLikeCount(state, a.proposal_id))
     .slice(0, 5);
 
-  // Pending items
-  const pendingProposals = PROPOSALS.filter(
-    (p) => getEffectiveProposalStatus(state, p) === "submitted"
-  );
-  const pendingSubmissions = SUBMISSIONS.filter(
-    (s) => getEffectiveSubmissionStatus(state, s) === "submitted"
-  );
-
-  // Proposer-specific
+  // My proposals
   const myProposals = PROPOSALS.filter((p) => p.user_id === userId);
+
+  // My pending proposals & submissions
   const myPendingProposals = myProposals.filter(
     (p) => getEffectiveProposalStatus(state, p) === "submitted"
   );
   const myPendingSubmissions = SUBMISSIONS.filter(
     (s) => s.user_id === userId && getEffectiveSubmissionStatus(state, s) === "submitted"
   );
-  const communityLikes = myProposals.reduce(
+
+  // Datasets I own - review pending proposals/submissions for those datasets
+  const myOwnedDatasetIds = DATASETS.filter((d) => d.owner_user_id === user.user_id).map((d) => d.dataset_id);
+  const reviewPendingProposals = PROPOSALS.filter(
+    (p) =>
+      myOwnedDatasetIds.includes(p.dataset_id) &&
+      p.user_id !== userId &&
+      getEffectiveProposalStatus(state, p) === "submitted"
+  );
+  const reviewPendingSubmissions = SUBMISSIONS.filter(
+    (s) =>
+      myOwnedDatasetIds.includes(s.dataset_id) &&
+      s.user_id !== userId &&
+      getEffectiveSubmissionStatus(state, s) === "submitted"
+  );
+
+  // Stats
+  const allPendingProposals = PROPOSALS.filter(
+    (p) => getEffectiveProposalStatus(state, p) === "submitted"
+  );
+  const totalLikes = PROPOSALS.reduce(
     (sum, p) => sum + getProposalLikeCount(state, p.proposal_id), 0
   );
 
@@ -157,7 +157,7 @@ export function DashboardPage() {
           おかえりなさい、{user.display_name}さん
         </h1>
         <p className="text-gray-500 mt-1">
-          {isHr ? "データセットとレビューの状況を確認しましょう" : "データの活用状況をチェックしましょう"}
+          データの活用状況をチェックしましょう
         </p>
         <div className="mt-3 flex flex-wrap gap-3">
           <Link
@@ -167,90 +167,62 @@ export function DashboardPage() {
             <span>📖</span>
             操作マニュアルを見る
           </Link>
-          <Link
-            to={isHr ? "/manual/hr" : "/manual/proposer"}
-            className="inline-flex items-center gap-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
-          >
-            <span>{isHr ? "🏢" : "🔍"}</span>
-            {isHr ? "データオーナー向けマニュアル" : "データ利用者向けマニュアル"}
-          </Link>
         </div>
       </div>
 
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {isHr ? (
-          <>
-            <StatCard icon={DatabaseIcon} count={DATASETS.length} label="総データセット数" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
-            <StatCard icon={CheckIcon} count={publishedDatasets.length} label="公開済み" gradient="bg-gradient-to-br from-green-500 to-green-600" />
-            <StatCard icon={ClipboardIcon} count={pendingProposals.length} label="レビュー待ち提案" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
-            <StatCard icon={LightbulbIcon} count={pendingSubmissions.length} label="レビュー待ち分析実行" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
-          </>
-        ) : (
-          <>
-            <StatCard icon={DatabaseIcon} count={publishedDatasets.length} label="公開データセット" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
-            <StatCard icon={LightbulbIcon} count={PROPOSALS.length} label="活用提案" gradient="bg-gradient-to-br from-green-500 to-green-600" />
-            <StatCard icon={UserIcon} count={myProposals.length} label="自分の提案" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
-            <StatCard icon={HeartStatIcon} count={communityLikes} label="全体のいいね" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
-          </>
-        )}
+        <StatCard icon={DatabaseIcon} count={publishedDatasets.length} label="公開データセット数" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
+        <StatCard icon={LightbulbIcon} count={PROPOSALS.length} label="全提案数" gradient="bg-gradient-to-br from-green-500 to-green-600" />
+        <StatCard icon={ClipboardIcon} count={allPendingProposals.length} label="レビュー待ち提案数" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
+        <StatCard icon={HeartStatIcon} count={totalLikes} label="全体のいいね数" gradient="bg-gradient-to-br from-orange-500 to-orange-600" />
       </div>
 
       {/* Workflow / Pending Items */}
-      {isHr ? (
-        (pendingProposals.length > 0 || pendingSubmissions.length > 0) && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <h2 className="text-sm font-semibold text-amber-800 mb-3">レビュー待ちワークフロー</h2>
-            <div className="space-y-2">
-              {pendingProposals.map((p) => (
-                <Link key={p.proposal_id} to={`/hr/proposals/${p.proposal_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span className="text-sm text-gray-700">{p.title}</span>
-                    <span className="text-xs text-gray-400">by {getUserDisplayName(p.user_id)}</span>
-                  </div>
-                  <span className="text-xs text-amber-600 font-medium">提案レビュー</span>
-                </Link>
-              ))}
-              {pendingSubmissions.map((s) => (
-                <Link key={s.submission_id} to={`/hr/submissions/${s.submission_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span className="text-sm text-gray-700">{s.title}</span>
-                    <span className="text-xs text-gray-400">by {getUserDisplayName(s.user_id)}</span>
-                  </div>
-                  <span className="text-xs text-amber-600 font-medium">分析実行レビュー</span>
-                </Link>
-              ))}
-            </div>
+      {(myPendingProposals.length > 0 || myPendingSubmissions.length > 0 || reviewPendingProposals.length > 0 || reviewPendingSubmissions.length > 0) && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <h2 className="text-sm font-semibold text-amber-800 mb-3">ワークフロー</h2>
+          <div className="space-y-2">
+            {myPendingProposals.map((p) => (
+              <Link key={p.proposal_id} to={`/proposals/${p.proposal_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-sm text-gray-700">{p.title}</span>
+                </div>
+                <span className="text-xs text-amber-600 font-medium">レビュー待ち</span>
+              </Link>
+            ))}
+            {myPendingSubmissions.map((s) => (
+              <Link key={s.submission_id} to={`/submissions/${s.submission_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-sm text-gray-700">{s.title}</span>
+                </div>
+                <span className="text-xs text-amber-600 font-medium">分析実行レビュー待ち</span>
+              </Link>
+            ))}
+            {reviewPendingProposals.map((p) => (
+              <Link key={p.proposal_id} to={`/proposals/${p.proposal_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-sm text-gray-700">{p.title}</span>
+                  <span className="text-xs text-gray-400">by {getUserDisplayName(p.user_id)}</span>
+                </div>
+                <span className="text-xs text-amber-600 font-medium">提案レビュー</span>
+              </Link>
+            ))}
+            {reviewPendingSubmissions.map((s) => (
+              <Link key={s.submission_id} to={`/submissions/${s.submission_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-sm text-gray-700">{s.title}</span>
+                  <span className="text-xs text-gray-400">by {getUserDisplayName(s.user_id)}</span>
+                </div>
+                <span className="text-xs text-amber-600 font-medium">分析実行レビュー</span>
+              </Link>
+            ))}
           </div>
-        )
-      ) : (
-        (myPendingProposals.length > 0 || myPendingSubmissions.length > 0) && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <h2 className="text-sm font-semibold text-amber-800 mb-3">ワークフロー</h2>
-            <div className="space-y-2">
-              {myPendingProposals.map((p) => (
-                <Link key={p.proposal_id} to={`/proposer/proposals/${p.proposal_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span className="text-sm text-gray-700">{p.title}</span>
-                  </div>
-                  <span className="text-xs text-amber-600 font-medium">レビュー待ち</span>
-                </Link>
-              ))}
-              {myPendingSubmissions.map((s) => (
-                <Link key={s.submission_id} to={`/proposer/submissions/${s.submission_id}`} className="flex items-center justify-between bg-white rounded-lg px-4 py-2 hover:bg-amber-50 transition">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span className="text-sm text-gray-700">{s.title}</span>
-                  </div>
-                  <span className="text-xs text-amber-600 font-medium">分析実行レビュー待ち</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )
+        </div>
       )}
 
       {/* Recent Datasets */}
@@ -265,7 +237,7 @@ export function DashboardPage() {
             return (
               <Link
                 key={d.dataset_id}
-                to={`${basePath}/datasets/${d.dataset_id}`}
+                to={`/datasets/${d.dataset_id}`}
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition border-t-4 border-blue-400 p-5 flex flex-col"
               >
                 <h3 className="font-bold text-gray-800 mb-1">{d.name}</h3>
@@ -306,7 +278,7 @@ export function DashboardPage() {
             return (
               <Link
                 key={p.proposal_id}
-                to={`${basePath}/proposals/${p.proposal_id}`}
+                to={`/proposals/${p.proposal_id}`}
                 className="flex items-center justify-between bg-white rounded-xl shadow-sm hover:shadow-md transition p-4"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -334,7 +306,7 @@ export function DashboardPage() {
       {/* Recent Community Proposals */}
       <section>
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          {isHr ? "全体の活動" : "最近の活用提案"}
+最近の活用提案
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
           {recentProposals.map((p) => {
@@ -344,7 +316,7 @@ export function DashboardPage() {
             return (
               <Link
                 key={p.proposal_id}
-                to={`${basePath}/proposals/${p.proposal_id}`}
+                to={`/proposals/${p.proposal_id}`}
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-5 flex flex-col"
               >
                 <h3 className="font-bold text-gray-800 mb-1">{p.title}</h3>

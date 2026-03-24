@@ -1,12 +1,6 @@
 import { Link } from "react-router-dom";
-import { loadState } from "../../store/session";
-import { USERS } from "../../data/users";
 
 export function ManualPage() {
-  const state = loadState();
-  const user = USERS.find((u) => u.user_id === state.currentUserId);
-  const isHr = user?.role === "hr";
-
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header */}
@@ -17,31 +11,9 @@ export function ManualPage() {
         </div>
         <p className="text-gray-600 text-lg">
           合成データカタログの使い方をわかりやすく解説しています。
-          あなたの役割に合ったマニュアルをご覧ください。
+          目的に合ったマニュアルをご覧ください。
         </p>
       </div>
-
-      {/* Role-based recommendation */}
-      {user && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
-          <span className="text-2xl">👤</span>
-          <div>
-            <p className="font-semibold text-green-800">
-              {user.display_name}さん（{isHr ? "データオーナー" : "データ利用者"}）向けのマニュアル
-            </p>
-            <p className="text-sm text-green-700 mt-0.5">
-              あなたには{" "}
-              <Link
-                to={isHr ? "/manual/hr" : "/manual/proposer"}
-                className="font-bold underline"
-              >
-                {isHr ? "データオーナー向けマニュアル" : "データ利用者向けマニュアル"}
-              </Link>{" "}
-              がおすすめです。
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Manual Cards */}
       <div className="grid md:grid-cols-2 gap-6">

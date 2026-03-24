@@ -5,11 +5,11 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement,
 import { DATASETS } from "../../data/datasets";
 import { PROPOSALS } from "../../data/proposals";
 import { ActionButton } from "../../components/common/ActionButton";
-import { StatusBadge } from "../../components/common/StatusBadge";
+import { StatusBadge, PublishBadge } from "../../components/common/StatusBadge";
 import { useToast } from "../../components/common/Toast";
 import { formatDate } from "../../utils/format";
-import { FILE_TYPE_LABELS, getDatasetUseCases, getDatasetSampleTables, getDatasetGraphs, getUserDisplayName, getDatasetLikeCount, getEffectiveProposalStatus, getProposalLikeCount } from "../../utils/data";
-import { loadState, toggleDatasetLike } from "../../store/session";
+import { FILE_TYPE_LABELS, getDatasetUseCases, getDatasetSampleTables, getDatasetGraphs, getUserDisplayName, getDatasetLikeCount, getEffectiveProposalStatus, getProposalLikeCount, isEffectivelyPublished } from "../../utils/data";
+import { loadState, saveState, toggleDatasetLike, publishDataset, getCurrentUserId } from "../../store/session";
 import { CatalogColumn, DatasetGraph } from "../../types/models";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
@@ -33,15 +33,79 @@ export function ProposerDatasetDetailPage() {
   const { id } = useParams<{ id: string }>();
   const dataset = DATASETS.find((d) => d.dataset_id === id);
   const { showToast } = useToast();
-  const [, setRefresh] = useState(0);
-  const state = loadState();
+  const [state, setState] = useState(loadState);
   const [expandedCol, setExpandedCol] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ name: "", description: "", tags: "" });
+
+  const currentUserId = getCurrentUserId();
+  const isOwner = !!(currentUserId && dataset && dataset.owner_user_id === currentUserId);
   const [activeGraphTab, setActiveGraphTab] = useState<string | null>(null);
   const [activeTableTab, setActiveTableTab] = useState<number>(0);
 
   if (!dataset) return <p className="text-red-500">データセットが見つかりません</p>;
 
   const isExternal = dataset.source === "external";
+  const isPublished = isEffectivelyPublished(state, dataset);
+
+  const handlePublish = () => {
+    if (isPublished) {
+      // 非公開にする（datasetPublished を false にセット）
+      const newState = {
+        ...state,
+        mutations: {
+          ...state.mutations,
+          datasetPublished: { ...state.mutations.datasetPublished, [dataset.dataset_id]: false },
+        },
+      };
+      saveState(newState);
+      setState(newState);
+      showToast("データセットを非公開にしました", "success");
+    } else {
+      setState(publishDataset(state, dataset.dataset_id));
+      showToast("データセットを公開しました", "success");
+    }
+  };
+
+  const handleGenerate = async () => {
+    setGenerating(true);
+    setProgress(0);
+    const steps = [
+      { pct: 20, label: "データ読み込み中..." },
+      { pct: 50, label: "合成データ生成中..." },
+      { pct: 80, label: "品質評価中..." },
+      { pct: 100, label: "完了!" },
+    ];
+    for (const step of steps) {
+      await new Promise((r) => setTimeout(r, 500));
+      setProgress(step.pct);
+    }
+    setGenerating(false);
+    showToast("合成データが生成されました", "success");
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("このデータセットを削除しますか？")) {
+      showToast("デモのため、削除は反映されません", "info");
+    }
+  };
+
+  const handleOpenEdit = () => {
+    setEditForm({
+      name: dataset.name,
+      description: dataset.description,
+      tags: dataset.tags.join(", "),
+    });
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    setShowEditModal(false);
+    showToast("デモのため、編集内容は反映されません", "info");
+  };
+
   const useCases = getDatasetUseCases(dataset.dataset_id);
   const graphs = getDatasetGraphs(dataset.dataset_id);
   const sampleTables = getDatasetSampleTables(dataset.dataset_id);
@@ -71,7 +135,46 @@ export function ProposerDatasetDetailPage() {
         {isExternal && (
           <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-medium">社外データ</span>
         )}
+        {isOwner && <PublishBadge isPublished={isPublished} />}
       </div>
+
+      {/* Owner Actions */}
+      {isOwner && (
+        <section className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
+          <h2 className="text-sm font-semibold text-indigo-800 mb-3">オーナー操作</h2>
+          {generating && (
+            <div className="mb-4">
+              <div className="w-full bg-gray-200 rounded-full h-4">
+                <div className="bg-blue-500 h-4 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+              </div>
+              <p className="text-sm text-gray-600 mt-1">{progress}%</p>
+            </div>
+          )}
+          <div className="flex gap-3">
+            <ActionButton onClick={handleGenerate} disabled={generating}>
+              合成データ生成
+            </ActionButton>
+            {isPublished ? (
+              <ActionButton variant="secondary" onClick={handlePublish}>
+                非公開にする
+              </ActionButton>
+            ) : (
+              <ActionButton variant="success" onClick={handlePublish}>
+                公開する
+              </ActionButton>
+            )}
+            <ActionButton variant="secondary" onClick={handleOpenEdit}>
+              情報を編集
+            </ActionButton>
+          </div>
+          {/* Danger Zone */}
+          <div className="mt-4 pt-3 border-t border-red-200">
+            <ActionButton variant="danger" onClick={handleDelete}>
+              データセットを削除
+            </ActionButton>
+          </div>
+        </section>
+      )}
 
       {/* Top section: Basic Info + Quality Report side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
@@ -97,7 +200,7 @@ export function ProposerDatasetDetailPage() {
             </div>
             <div className="flex items-center gap-2 mt-2">
               <button
-                onClick={() => { toggleDatasetLike(loadState(), dataset.dataset_id); setRefresh(r => r + 1); }}
+                onClick={() => { setState(toggleDatasetLike(state, dataset.dataset_id)); }}
                 className="flex items-center gap-1 text-sm hover:scale-110 transition-transform"
               >
                 {state.mutations.likedDatasets.includes(dataset.dataset_id) ? (
@@ -282,7 +385,7 @@ export function ProposerDatasetDetailPage() {
               {relatedProposals.map(p => {
                 const pStatus = getEffectiveProposalStatus(state, p);
                 return (
-                  <Link key={p.proposal_id} to={`/proposer/proposals/${p.proposal_id}`}
+                  <Link key={p.proposal_id} to={`/proposals/${p.proposal_id}`}
                     className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-medium text-gray-800 truncate">{p.title}</h4>
@@ -442,16 +545,62 @@ export function ProposerDatasetDetailPage() {
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Link to="/proposer/datasets">
+        <Link to="/datasets">
           <ActionButton variant="secondary">一覧に戻る</ActionButton>
         </Link>
         <ActionButton onClick={() => showToast("デモではダウンロードできません", "info")} variant="secondary">
           テンプレートダウンロード
         </ActionButton>
-        <Link to={`/proposer/proposals/new?dataset=${dataset.dataset_id}`}>
+        <Link to={`/proposals/new?dataset=${dataset.dataset_id}`}>
           <ActionButton>新規提案を作成</ActionButton>
         </Link>
       </div>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-4">
+            <h2 className="text-lg font-semibold mb-4">データセット情報の編集</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">データセット名</label>
+                <input
+                  type="text"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">説明</label>
+                <textarea
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">タグ（カンマ区切り）</label>
+                <input
+                  type="text"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={editForm.tags}
+                  onChange={(e) => setEditForm({ ...editForm, tags: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <ActionButton variant="secondary" onClick={() => setShowEditModal(false)}>
+                キャンセル
+              </ActionButton>
+              <ActionButton onClick={handleSaveEdit}>
+                保存する
+              </ActionButton>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
