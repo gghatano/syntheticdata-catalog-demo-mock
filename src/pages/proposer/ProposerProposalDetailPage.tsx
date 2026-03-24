@@ -3,12 +3,16 @@ import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PROPOSALS } from "../../data/proposals";
+import { DATASETS } from "../../data/datasets";
 import { USERS } from "../../data/users";
-import { loadState, toggleProposalLike } from "../../store/session";
+import { loadState, toggleProposalLike, setProposalStatus, addReview } from "../../store/session";
 import { StatusBadge } from "../../components/common/StatusBadge";
-import { ReviewList } from "../../components/common/ReviewList";
+import { ActionButton } from "../../components/common/ActionButton";
+import { ReviewList, REVIEW_LABELS } from "../../components/common/ReviewList";
+import { useToast } from "../../components/common/Toast";
 import { formatDate } from "../../utils/format";
 import { getDatasetName, getUserDisplayName, getProposalLikeCount, getEffectiveProposalStatus } from "../../utils/data";
+import { ReviewAction, ReviewComment, ProposalStatus } from "../../types/models";
 import { ProposalCharts } from "../../components/common/ProposalCharts";
 
 const proseClasses = "prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800 prose-table:text-sm prose-th:bg-gray-50 prose-th:border prose-th:border-gray-200 prose-th:px-3 prose-th:py-1.5 prose-td:border prose-td:border-gray-200 prose-td:px-3 prose-td:py-1.5";
@@ -37,14 +41,47 @@ function CollapsibleSection({ title, children, defaultOpen = false }: { title: s
 export function ProposerProposalDetailPage() {
   const { id } = useParams<{ id: string }>();
   const proposal = PROPOSALS.find((p) => p.proposal_id === id);
-  const state = loadState();
+  const { showToast } = useToast();
+  const [state, setState] = useState(loadState);
+  const [comment, setComment] = useState("");
   const [, setRefresh] = useState(0);
 
   if (!proposal) return <p className="text-red-500">提案が見つかりません</p>;
 
+  const currentUserId = state.currentUserId;
+  const dataset = DATASETS.find((d) => d.dataset_id === proposal.dataset_id);
+  const isDatasetOwner = dataset ? dataset.owner_user_id === currentUserId : false;
+
   const status = getEffectiveProposalStatus(state, proposal);
   const addedReviews = state.mutations.addedReviews[proposal.proposal_id] ?? [];
   const allReviews = [...proposal.reviews, ...addedReviews];
+
+  const submitReview = (action: ReviewAction) => {
+    if (!comment.trim() && action !== "comment") {
+      showToast("コメントを入力してください", "warning");
+      return;
+    }
+
+    const newReview: ReviewComment = {
+      id: allReviews.length + 1,
+      reviewer_user_id: currentUserId!,
+      action,
+      comment: comment.trim() || `${REVIEW_LABELS[action]}しました`,
+      created_at: new Date().toISOString(),
+    };
+
+    const statusMap: Record<ReviewAction, ProposalStatus> = {
+      approve: "approved",
+      reject: "rejected",
+      comment: status,
+    };
+
+    let newState = setProposalStatus(state, proposal.proposal_id, statusMap[action]);
+    newState = addReview(newState, proposal.proposal_id, newReview);
+    setState(newState);
+    setComment("");
+    showToast(`${REVIEW_LABELS[action]}しました`, "success");
+  };
 
   return (
     <div>
@@ -76,7 +113,7 @@ export function ProposerProposalDetailPage() {
         <h2 className="text-lg font-semibold mb-3">提案情報</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-500">提案ID:</span> {proposal.proposal_id}</div>
-          <div><span className="text-gray-500">データセット:</span> <Link to={`/proposer/datasets/${proposal.dataset_id}`} className="text-blue-600 hover:underline">{getDatasetName(proposal.dataset_id)}</Link></div>
+          <div><span className="text-gray-500">データセット:</span> <Link to={`/datasets/${proposal.dataset_id}`} className="text-blue-600 hover:underline">{getDatasetName(proposal.dataset_id)}</Link></div>
           <div><span className="text-gray-500">ステータス:</span> <StatusBadge status={status} /></div>
           <div><span className="text-gray-500">提出日:</span> {formatDate(proposal.created_at)}</div>
         </div>
@@ -142,11 +179,29 @@ export function ProposerProposalDetailPage() {
         </pre>
       </CollapsibleSection>
 
-      {/* レビューコメント */}
-      <section className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-3">レビューコメント</h2>
+      {/* レビュー履歴 */}
+      <section className="bg-white rounded-lg shadow p-6 mb-6">
+        <h2 className="text-lg font-semibold mb-3">レビュー履歴</h2>
         <ReviewList reviews={allReviews} />
       </section>
+
+      {/* レビューフォーム（データセットオーナーのみ表示） */}
+      {isDatasetOwner && (
+        <section className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-3">レビューフォーム</h2>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="コメントを入力..."
+            className="w-full border border-gray-300 rounded p-3 text-sm mb-3 h-24"
+          />
+          <div className="flex gap-3">
+            <ActionButton variant="success" onClick={() => submitReview("approve")}>承認</ActionButton>
+            <ActionButton variant="danger" onClick={() => submitReview("reject")}>差戻し</ActionButton>
+            <ActionButton variant="secondary" onClick={() => submitReview("comment")}>コメントのみ</ActionButton>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

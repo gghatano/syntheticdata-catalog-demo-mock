@@ -150,7 +150,7 @@ export function ProposerManualPage() {
           <OperationItem
             label="データセット一覧を見る"
             detail="「データセット」メニューから公開されているデータセットの一覧を確認できます。"
-            link="/proposer/datasets"
+            link="/datasets"
           />
           <OperationItem
             label="データセットの詳細を確認する"
@@ -183,12 +183,12 @@ export function ProposerManualPage() {
           <OperationItem
             label="マイ提案を管理する"
             detail="「マイ提案」メニューから自分の提案一覧を確認・管理できます。"
-            link="/proposer/proposals"
+            link="/proposals"
           />
           <OperationItem
             label="新しい提案を作成する"
             detail="「新規提案」ボタンから提案書を作成します。タイトル・目的・使用するデータセット・期待する成果などを入力します。"
-            link="/proposer/proposals/new"
+            link="/proposals/new"
           />
           <OperationItem
             label="提案の状態を確認する"
@@ -219,12 +219,12 @@ export function ProposerManualPage() {
           <OperationItem
             label="マイ分析実行を管理する"
             detail="「マイ分析実行」メニューから自分の分析実行リクエスト一覧を確認できます。"
-            link="/proposer/submissions"
+            link="/submissions"
           />
           <OperationItem
             label="新しい分析実行リクエストを作成する"
             detail="「新規分析実行リクエストを作成」ボタンから分析実行リクエストを作成します。使用するデータセット・行数・ファイル形式などのパラメータを設定します。"
-            link="/proposer/submissions/new"
+            link="/submissions/new"
           />
           <OperationItem
             label="実行結果を確認する"
@@ -255,7 +255,7 @@ export function ProposerManualPage() {
           <OperationItem
             label="全体の提案を見る"
             detail="「全体の提案」メニューから他のユーザーが公開した提案を閲覧できます。活用事例の参考になります。"
-            link="/proposer/community"
+            link="/community"
           />
           <OperationItem
             label="提案にいいねをつける"
@@ -282,7 +282,7 @@ export function ProposerManualPage() {
           <OperationItem
             label="データ公開リクエスト一覧を見る"
             detail="「データ公開リクエスト」メニューから過去のリクエスト状況を確認できます。"
-            link="/proposer/data-requests"
+            link="/data-requests"
           />
           <OperationItem
             label="新しいリクエストを送る"

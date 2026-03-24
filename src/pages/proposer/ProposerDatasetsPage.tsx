@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { USERS } from "../../data/users";
-import { loadState, toggleDatasetLike } from "../../store/session";
+import { loadState, toggleDatasetLike, getCurrentUserId } from "../../store/session";
 import { formatDate } from "../../utils/format";
 import { getPublishedDatasets, getDatasetUseCases, getDatasetSampleTables, getDatasetLikeCount } from "../../utils/data";
 import { DataSource } from "../../types/models";
@@ -14,7 +14,9 @@ export function ProposerDatasetsPage() {
   const [selectedDepts, setSelectedDepts] = useState<string[]>([]);
   const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
+  const [showMineOnly, setShowMineOnly] = useState(false);
   const [, setRefresh] = useState(0);
+  const currentUserId = getCurrentUserId();
   const state = loadState();
 
   const published = getPublishedDatasets(state);
@@ -53,7 +55,8 @@ export function ProposerDatasetsPage() {
     // Provider filter for external data
     const matchProvider = selectedProviders.length === 0 ? true : (isExternal && d.provider && selectedProviders.includes(d.provider));
 
-    return matchSearch && matchTag && matchDept && matchProvider;
+    const matchMine = !showMineOnly || d.owner_user_id === currentUserId;
+    return matchSearch && matchTag && matchDept && matchProvider && matchMine;
   });
 
   const toggleTag = (tag: string) => {
@@ -88,24 +91,38 @@ export function ProposerDatasetsPage() {
       <h1 className="text-2xl font-bold text-gray-800 mb-4">公開データセット</h1>
 
       {/* Source tabs */}
-      <div className="flex gap-0 border-b border-gray-200 mb-4">
-        {([
-          { key: "all" as SourceFilter, label: "すべて" },
-          { key: "internal" as SourceFilter, label: "社内データ" },
-          { key: "external" as SourceFilter, label: "社外データ" },
-        ]).map(tab => (
+      <div className="flex items-center border-b border-gray-200 mb-4">
+        <div className="flex gap-0">
+          {([
+            { key: "all" as SourceFilter, label: "すべて" },
+            { key: "internal" as SourceFilter, label: "社内データ" },
+            { key: "external" as SourceFilter, label: "社外データ" },
+          ]).map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => handleSourceChange(tab.key)}
+              className={`px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                sourceFilter === tab.key
+                  ? "border-blue-500 text-blue-600 font-bold"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <div className="ml-auto mb-1">
           <button
-            key={tab.key}
-            onClick={() => handleSourceChange(tab.key)}
-            className={`px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-              sourceFilter === tab.key
-                ? "border-blue-500 text-blue-600 font-bold"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            onClick={() => setShowMineOnly(prev => !prev)}
+            className={`px-4 py-1.5 text-sm font-medium rounded-full border transition-colors ${
+              showMineOnly
+                ? "bg-blue-500 text-white border-blue-500"
+                : "bg-white text-gray-600 border-gray-300 hover:border-blue-300 hover:text-blue-600"
             }`}
           >
-            {tab.label}
+            マイデータセット
           </button>
-        ))}
+        </div>
       </div>
 
       {/* Stats bar */}
@@ -219,7 +236,7 @@ export function ProposerDatasetsPage() {
               return (
                 <Link
                   key={d.dataset_id}
-                  to={`/proposer/datasets/${d.dataset_id}`}
+                  to={`/datasets/${d.dataset_id}`}
                   className={`bg-white rounded-lg shadow p-5 border-t-[3px] ${borderColor} hover:-translate-y-1 hover:shadow-lg transition-all duration-300 block`}
                 >
                   <div className="flex items-start justify-between mb-2">

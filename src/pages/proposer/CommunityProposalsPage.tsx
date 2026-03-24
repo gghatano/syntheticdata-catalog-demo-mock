@@ -78,7 +78,7 @@ export function CommunityProposalsPage() {
             return (
               <Link
                 key={proposal.proposal_id}
-                to={`/proposer/proposals/${proposal.proposal_id}`}
+                to={`/proposals/${proposal.proposal_id}`}
                 className={`block bg-white rounded-lg shadow hover:-translate-y-1 transition-transform border-l-4 ${borderColor} p-4`}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
