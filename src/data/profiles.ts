@@ -1,6 +1,6 @@
 import { FileType } from "../types/models";
 
-export const PREVIEWS: Record<string, Record<FileType, Record<string, unknown>[]>> = {
+export const PREVIEWS: Record<string, Partial<Record<FileType, Record<string, unknown>[]>>> = {
   "SYNTH-DS001": {
     employee_master: [
       { emp_id: "SYNTH-E001", name: "●●●●", department: "【サンプル】システム開発部", join_date: "2020-04-01", grade: "G3", skill_score: 78 },

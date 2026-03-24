@@ -2,7 +2,15 @@ export type UserRole = "hr" | "proposer" | "admin";
 
 export type DataSource = "internal" | "external";
 
-export type FileType = "employee_master" | "project_allocation" | "working_hours";
+export type FileType =
+  | "employee_master" | "project_allocation" | "working_hours"
+  | "account_transaction"
+  | "loan_pipeline"
+  | "ib_access_log"
+  | "atm_operation_log"
+  | "inquiry_tickets"
+  | "communication_meta"
+  | "expense_budget";
 
 export type SubmissionStatus =
   | "draft" | "submitted" | "validation_failed" | "under_review"

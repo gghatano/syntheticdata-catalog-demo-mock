@@ -35,6 +35,13 @@ export const FILE_TYPE_LABELS: Record<FileType, string> = {
   employee_master: "行員マスタ",
   project_allocation: "店舗配置",
   working_hours: "勤務時間",
+  account_transaction: "口座取引",
+  loan_pipeline: "融資パイプライン",
+  ib_access_log: "IBアクセスログ",
+  atm_operation_log: "ATM稼働ログ",
+  inquiry_tickets: "問い合わせチケット",
+  communication_meta: "コミュニケーションメタ",
+  expense_budget: "経費・予算",
 };
 
 export const RESULT_SCOPE_LABELS: Record<string, string> = {

@@ -113,15 +113,15 @@ export const DATASETS: Dataset[] = [
     tags: ["リテール", "口座", "取引"],
     created_at: "2024-09-15T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS004/account_transaction.csv", created_at: "2024-09-15T09:00:00Z" },
+      { file_type: "account_transaction", file_path: "data/SYNTH-DS004/account_transaction.csv", created_at: "2024-09-15T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS004/account_transaction_seed42.csv", seed: 42, created_at: "2024-09-30T10:00:00Z" },
+      { file_type: "account_transaction", file_path: "synthetic/SYNTH-DS004/account_transaction_seed42.csv", seed: 42, created_at: "2024-09-30T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.92,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 10000, row_count_synthetic: 10000, column_correlation: 0.93, distribution_similarity: 0.91, statistical_parity: 0.92 },
+        { file_type: "account_transaction", row_count_original: 10000, row_count_synthetic: 10000, column_correlation: 0.93, distribution_similarity: 0.91, statistical_parity: 0.92 },
       ],
     },
     catalog: [
@@ -143,15 +143,15 @@ export const DATASETS: Dataset[] = [
     tags: ["法人営業", "融資", "パイプライン"],
     created_at: "2024-10-01T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS005/loan_pipeline.csv", created_at: "2024-10-01T09:00:00Z" },
+      { file_type: "loan_pipeline", file_path: "data/SYNTH-DS005/loan_pipeline.csv", created_at: "2024-10-01T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS005/loan_pipeline_seed42.csv", seed: 42, created_at: "2024-10-15T10:00:00Z" },
+      { file_type: "loan_pipeline", file_path: "synthetic/SYNTH-DS005/loan_pipeline_seed42.csv", seed: 42, created_at: "2024-10-15T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.89,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 3000, row_count_synthetic: 3000, column_correlation: 0.90, distribution_similarity: 0.88, statistical_parity: 0.89 },
+        { file_type: "loan_pipeline", row_count_original: 3000, row_count_synthetic: 3000, column_correlation: 0.90, distribution_similarity: 0.88, statistical_parity: 0.89 },
       ],
     },
     catalog: [
@@ -173,15 +173,15 @@ export const DATASETS: Dataset[] = [
     tags: ["IB", "デジタル", "アクセス解析"],
     created_at: "2024-10-20T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS006/ib_access_log.csv", created_at: "2024-10-20T09:00:00Z" },
+      { file_type: "ib_access_log", file_path: "data/SYNTH-DS006/ib_access_log.csv", created_at: "2024-10-20T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS006/ib_access_log_seed42.csv", seed: 42, created_at: "2024-11-05T10:00:00Z" },
+      { file_type: "ib_access_log", file_path: "synthetic/SYNTH-DS006/ib_access_log_seed42.csv", seed: 42, created_at: "2024-11-05T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.93,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 50000, row_count_synthetic: 50000, column_correlation: 0.94, distribution_similarity: 0.92, statistical_parity: 0.93 },
+        { file_type: "ib_access_log", row_count_original: 50000, row_count_synthetic: 50000, column_correlation: 0.94, distribution_similarity: 0.92, statistical_parity: 0.93 },
       ],
     },
     catalog: [
@@ -203,15 +203,15 @@ export const DATASETS: Dataset[] = [
     tags: ["ATM", "障害管理", "運用"],
     created_at: "2024-11-10T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS007/atm_operation_log.csv", created_at: "2024-11-10T09:00:00Z" },
+      { file_type: "atm_operation_log", file_path: "data/SYNTH-DS007/atm_operation_log.csv", created_at: "2024-11-10T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS007/atm_operation_log_seed42.csv", seed: 42, created_at: "2024-11-25T10:00:00Z" },
+      { file_type: "atm_operation_log", file_path: "synthetic/SYNTH-DS007/atm_operation_log_seed42.csv", seed: 42, created_at: "2024-11-25T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.90,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 20000, row_count_synthetic: 20000, column_correlation: 0.91, distribution_similarity: 0.89, statistical_parity: 0.90 },
+        { file_type: "atm_operation_log", row_count_original: 20000, row_count_synthetic: 20000, column_correlation: 0.91, distribution_similarity: 0.89, statistical_parity: 0.90 },
       ],
     },
     catalog: [
@@ -232,15 +232,15 @@ export const DATASETS: Dataset[] = [
     tags: ["コールセンター", "NLP", "顧客"],
     created_at: "2024-12-01T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS008/inquiry_tickets.csv", created_at: "2024-12-01T09:00:00Z" },
+      { file_type: "inquiry_tickets", file_path: "data/SYNTH-DS008/inquiry_tickets.csv", created_at: "2024-12-01T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS008/inquiry_tickets_seed42.csv", seed: 42, created_at: "2024-12-15T10:00:00Z" },
+      { file_type: "inquiry_tickets", file_path: "synthetic/SYNTH-DS008/inquiry_tickets_seed42.csv", seed: 42, created_at: "2024-12-15T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.87,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 8000, row_count_synthetic: 8000, column_correlation: 0.88, distribution_similarity: 0.86, statistical_parity: 0.87 },
+        { file_type: "inquiry_tickets", row_count_original: 8000, row_count_synthetic: 8000, column_correlation: 0.88, distribution_similarity: 0.86, statistical_parity: 0.87 },
       ],
     },
     catalog: [
@@ -262,15 +262,15 @@ export const DATASETS: Dataset[] = [
     tags: ["HR", "コミュニケーション", "店舗連携"],
     created_at: "2025-01-15T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS009/communication_meta.csv", created_at: "2025-01-15T09:00:00Z" },
+      { file_type: "communication_meta", file_path: "data/SYNTH-DS009/communication_meta.csv", created_at: "2025-01-15T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS009/communication_meta_seed42.csv", seed: 42, created_at: "2025-01-30T10:00:00Z" },
+      { file_type: "communication_meta", file_path: "synthetic/SYNTH-DS009/communication_meta_seed42.csv", seed: 42, created_at: "2025-01-30T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.86,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 15000, row_count_synthetic: 15000, column_correlation: 0.87, distribution_similarity: 0.85, statistical_parity: 0.86 },
+        { file_type: "communication_meta", row_count_original: 15000, row_count_synthetic: 15000, column_correlation: 0.87, distribution_similarity: 0.85, statistical_parity: 0.86 },
       ],
     },
     catalog: [
@@ -291,15 +291,15 @@ export const DATASETS: Dataset[] = [
     tags: ["財務経理", "予算", "コスト分析"],
     created_at: "2025-02-01T09:00:00Z",
     files: [
-      { file_type: "employee_master", file_path: "data/SYNTH-DS010/expense_budget.csv", created_at: "2025-02-01T09:00:00Z" },
+      { file_type: "expense_budget", file_path: "data/SYNTH-DS010/expense_budget.csv", created_at: "2025-02-01T09:00:00Z" },
     ],
     synthetic_artifacts: [
-      { file_type: "employee_master", file_path: "synthetic/SYNTH-DS010/expense_budget_seed42.csv", seed: 42, created_at: "2025-02-15T10:00:00Z" },
+      { file_type: "expense_budget", file_path: "synthetic/SYNTH-DS010/expense_budget_seed42.csv", seed: 42, created_at: "2025-02-15T10:00:00Z" },
     ],
     quality_report: {
       overall_score: 0.95,
       file_reports: [
-        { file_type: "employee_master", row_count_original: 5000, row_count_synthetic: 5000, column_correlation: 0.96, distribution_similarity: 0.94, statistical_parity: 0.95 },
+        { file_type: "expense_budget", row_count_original: 5000, row_count_synthetic: 5000, column_correlation: 0.96, distribution_similarity: 0.94, statistical_parity: 0.95 },
       ],
     },
     catalog: [
