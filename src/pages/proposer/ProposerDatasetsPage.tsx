@@ -48,10 +48,10 @@ export function ProposerDatasetsPage() {
     // Department filter for internal data
     const isExternal = d.source === "external";
     const ownerDept = USERS.find(u => u.user_id === d.owner_user_id)?.department ?? "不明";
-    const matchDept = selectedDepts.length === 0 || isExternal || selectedDepts.includes(ownerDept);
+    const matchDept = selectedDepts.length === 0 ? true : (!isExternal && selectedDepts.includes(ownerDept));
 
     // Provider filter for external data
-    const matchProvider = selectedProviders.length === 0 || !isExternal || (d.provider && selectedProviders.includes(d.provider));
+    const matchProvider = selectedProviders.length === 0 ? true : (isExternal && d.provider && selectedProviders.includes(d.provider));
 
     return matchSearch && matchTag && matchDept && matchProvider;
   });
