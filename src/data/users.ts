@@ -83,6 +83,6 @@ export const USERS: User[] = [
     user_id: "external_provider",
     display_name: "外部データプロバイダ",
     role: "hr",
-    department: "社外データ",
+    department: "【サンプル】社外データ",
   },
 ];
