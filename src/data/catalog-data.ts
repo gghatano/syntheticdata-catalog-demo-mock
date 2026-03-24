@@ -1297,6 +1297,118 @@ export const EXT_DS006_GRAPHS: DatasetGraph[] = [
   },
 ];
 
+// ============================================================
+// EXT-DS007: さくらマート 会員データ（合成） - サンプルテーブル
+// ============================================================
+
+export const EXT_DS007_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "members",
+    description: "さくらマート会員の属性・購買情報を管理するテーブル",
+    columns: [
+      { name: "member_id", type: "string", displayName: "会員ID", description: "会員を一意に識別するID" },
+      { name: "name", type: "string", displayName: "氏名", description: "会員の氏名（合成データではマスク済み）" },
+      { name: "age", type: "integer", displayName: "年齢", description: "会員の年齢" },
+      { name: "gender", type: "string", displayName: "性別", description: "性別（男性/女性/その他）" },
+      { name: "postal_code", type: "string", displayName: "郵便番号", description: "会員の郵便番号（合成データでは下位桁マスク）" },
+      { name: "prefecture", type: "string", displayName: "居住都道府県", description: "会員の居住都道府県" },
+      { name: "registration_date", type: "date", displayName: "会員登録日", description: "会員カード登録日" },
+      { name: "membership_rank", type: "string", displayName: "会員ランク", description: "会員ランク（レギュラー/シルバー/ゴールド/プラチナ）" },
+      { name: "total_purchase_amount", type: "integer", displayName: "累計購買金額(円)", description: "会員の累計購買金額" },
+      { name: "visit_frequency_monthly", type: "number", displayName: "月間来店回数", description: "直近の月間平均来店回数" },
+      { name: "last_visit_date", type: "date", displayName: "最終来店日", description: "最後に来店した日付" },
+      { name: "is_active", type: "boolean", displayName: "アクティブフラグ", description: "直近3ヶ月以内に来店があるかどうか" },
+    ],
+    rows: [
+      { member_id: "SKM-00001", name: "●●●●", age: 34, gender: "女性", postal_code: "150-****", prefecture: "東京都", registration_date: "2018-05-12", membership_rank: "ゴールド", total_purchase_amount: 542000, visit_frequency_monthly: 8.5, last_visit_date: "2025-03-10", is_active: true },
+      { member_id: "SKM-00002", name: "●●●●", age: 52, gender: "男性", postal_code: "221-****", prefecture: "神奈川県", registration_date: "2015-11-03", membership_rank: "プラチナ", total_purchase_amount: 1850000, visit_frequency_monthly: 15.2, last_visit_date: "2025-03-13", is_active: true },
+      { member_id: "SKM-00003", name: "●●●●", age: 28, gender: "女性", postal_code: "330-****", prefecture: "埼玉県", registration_date: "2022-08-20", membership_rank: "レギュラー", total_purchase_amount: 78000, visit_frequency_monthly: 3.2, last_visit_date: "2025-02-28", is_active: true },
+      { member_id: "SKM-00004", name: "●●●●", age: 67, gender: "男性", postal_code: "260-****", prefecture: "千葉県", registration_date: "2012-03-15", membership_rank: "シルバー", total_purchase_amount: 320000, visit_frequency_monthly: 5.8, last_visit_date: "2024-12-20", is_active: false },
+      { member_id: "SKM-00005", name: "●●●●", age: 41, gender: "女性", postal_code: "336-****", prefecture: "埼玉県", registration_date: "2020-01-08", membership_rank: "ゴールド", total_purchase_amount: 485000, visit_frequency_monthly: 9.1, last_visit_date: "2025-03-12", is_active: true },
+    ],
+    primaryKey: ["member_id"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS007_USE_CASES: DatasetUseCase[] = [
+  { title: "顧客セグメント分析", description: "会員の属性・購買パターンからセグメントを自動分類し、ターゲットマーケティングの精度を向上させる。合成データにより個人を特定せずに分析が可能。", relatedGraphId: "ext-graph-member-rank" },
+  { title: "離反予測モデル", description: "来店頻度の変化や最終来店日からの経過日数を基に、会員の離反リスクを予測するモデルを構築する。", relatedGraphId: "ext-graph-member-age" },
+  { title: "クロスセル分析", description: "銀行の金融商品データと合成会員データを掛け合わせ、提携ローンやクレジットカードの効果的な訴求対象を特定する。", relatedGraphId: null },
+];
+
+export const EXT_DS007_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-member-rank",
+    title: "会員ランク分布",
+    type: "doughnut",
+    labels: ["レギュラー", "シルバー", "ゴールド", "プラチナ"],
+    datasets: [{ label: "会員数", data: [10000, 8000, 5000, 2000], backgroundColor: ["#94a3b8", "#a1a1aa", "#fbbf24", "#8b5cf6"] }],
+  },
+  {
+    id: "ext-graph-member-age",
+    title: "年代別会員数",
+    type: "bar",
+    labels: ["18-25", "25-35", "35-45", "45-55", "55-65", "65-75", "75-89"],
+    datasets: [{ label: "会員数", data: [2500, 4200, 5100, 4800, 4000, 2800, 1600], backgroundColor: "rgba(234, 88, 12, 0.6)", borderColor: "rgb(234, 88, 12)" }],
+  },
+];
+
+// ============================================================
+// EXT-DS008: さくらマート 店舗別売上データ（合成） - サンプルテーブル
+// ============================================================
+
+export const EXT_DS008_SAMPLE_TABLES: SampleTable[] = [
+  {
+    tableName: "store_daily_sales",
+    description: "さくらマート各店舗の日次売上データ",
+    columns: [
+      { name: "store_id", type: "string", displayName: "店舗ID", description: "店舗を一意に識別するID" },
+      { name: "store_name", type: "string", displayName: "店舗名", description: "店舗の名称" },
+      { name: "sales_date", type: "date", displayName: "売上日", description: "売上の対象日" },
+      { name: "total_sales", type: "integer", displayName: "売上合計(円)", description: "当日の売上合計金額" },
+      { name: "customer_count", type: "integer", displayName: "来客数", description: "当日の来客数" },
+      { name: "avg_basket_size", type: "integer", displayName: "客単価(円)", description: "当日の平均客単価" },
+      { name: "grocery_sales", type: "integer", displayName: "食料品売上(円)", description: "食料品カテゴリの売上" },
+      { name: "daily_goods_sales", type: "integer", displayName: "日用品売上(円)", description: "日用品カテゴリの売上" },
+      { name: "fresh_food_sales", type: "integer", displayName: "生鮮食品売上(円)", description: "生鮮食品カテゴリの売上" },
+      { name: "day_of_week", type: "string", displayName: "曜日", description: "売上日の曜日" },
+    ],
+    rows: [
+      { store_id: "SKM-ST01", store_name: "さくらマート 世田谷店", sales_date: "2025-03-01", total_sales: 3250000, customer_count: 1380, avg_basket_size: 2355, grocery_sales: 1850000, daily_goods_sales: 520000, fresh_food_sales: 880000, day_of_week: "土" },
+      { store_id: "SKM-ST02", store_name: "さくらマート 川崎店", sales_date: "2025-03-01", total_sales: 2680000, customer_count: 1150, avg_basket_size: 2330, grocery_sales: 1520000, daily_goods_sales: 430000, fresh_food_sales: 730000, day_of_week: "土" },
+      { store_id: "SKM-ST03", store_name: "さくらマート 浦和店", sales_date: "2025-03-01", total_sales: 1950000, customer_count: 850, avg_basket_size: 2294, grocery_sales: 1120000, daily_goods_sales: 310000, fresh_food_sales: 520000, day_of_week: "土" },
+      { store_id: "SKM-ST01", store_name: "さくらマート 世田谷店", sales_date: "2025-03-02", total_sales: 4150000, customer_count: 1620, avg_basket_size: 2562, grocery_sales: 2350000, daily_goods_sales: 680000, fresh_food_sales: 1120000, day_of_week: "日" },
+      { store_id: "SKM-ST04", store_name: "さくらマート 船橋店", sales_date: "2025-03-01", total_sales: 2120000, customer_count: 920, avg_basket_size: 2304, grocery_sales: 1200000, daily_goods_sales: 350000, fresh_food_sales: 570000, day_of_week: "土" },
+    ],
+    primaryKey: ["store_id", "sales_date"],
+    foreignKeys: [],
+  },
+];
+
+export const EXT_DS008_USE_CASES: DatasetUseCase[] = [
+  { title: "店舗パフォーマンス分析", description: "店舗別・カテゴリ別の売上トレンドを分析し、優良店舗のベストプラクティスを特定する。", relatedGraphId: "ext-graph-sales-category" },
+  { title: "需要予測モデル", description: "曜日・季節・天候データと組み合わせた需要予測モデルを構築し、在庫最適化・発注量の自動調整を実現する。", relatedGraphId: "ext-graph-sales-dow" },
+  { title: "提携ローン商圏分析", description: "店舗周辺の来客数データと銀行の支店データを掛け合わせ、提携ローンの需要ポテンシャルが高いエリアを特定する。", relatedGraphId: null },
+];
+
+export const EXT_DS008_GRAPHS: DatasetGraph[] = [
+  {
+    id: "ext-graph-sales-category",
+    title: "カテゴリ別売上構成",
+    type: "pie",
+    labels: ["食料品", "日用品", "生鮮食品"],
+    datasets: [{ label: "売上(百万円)", data: [1650, 480, 720], backgroundColor: ["rgba(59, 130, 246, 0.7)", "rgba(16, 185, 129, 0.7)", "rgba(234, 88, 12, 0.7)"] }],
+  },
+  {
+    id: "ext-graph-sales-dow",
+    title: "曜日別平均売上",
+    type: "bar",
+    labels: ["月", "火", "水", "木", "金", "土", "日"],
+    datasets: [{ label: "平均売上(万円)", data: [220, 210, 230, 215, 260, 350, 380], backgroundColor: "rgba(139, 92, 246, 0.6)", borderColor: "rgb(139, 92, 246)" }],
+  },
+];
+
 // データセットIDとカタログデータのマッピング
 // ============================================================
 
@@ -1321,4 +1433,6 @@ export const CATALOG_DATA: Record<string, {
   "EXT-DS004": { sampleTables: EXT_DS004_SAMPLE_TABLES, useCases: EXT_DS004_USE_CASES, graphs: EXT_DS004_GRAPHS },
   "EXT-DS005": { sampleTables: EXT_DS005_SAMPLE_TABLES, useCases: EXT_DS005_USE_CASES, graphs: EXT_DS005_GRAPHS },
   "EXT-DS006": { sampleTables: EXT_DS006_SAMPLE_TABLES, useCases: EXT_DS006_USE_CASES, graphs: EXT_DS006_GRAPHS },
+  "EXT-DS007": { sampleTables: EXT_DS007_SAMPLE_TABLES, useCases: EXT_DS007_USE_CASES, graphs: EXT_DS007_GRAPHS },
+  "EXT-DS008": { sampleTables: EXT_DS008_SAMPLE_TABLES, useCases: EXT_DS008_USE_CASES, graphs: EXT_DS008_GRAPHS },
 };
