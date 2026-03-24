@@ -466,4 +466,84 @@ export const DATASETS: Dataset[] = [
       { column_name: "helpful_count", inferred_type: "integer", is_pii: false, pii_reason: null, description: "参考になった数", stats: { count: 100000, null_count: 0, unique_count: 200, min: 0, max: 500, mean: 8.5, std: 22.3 } },
     ],
   },
+  // ============================================================
+  // EXT-DS007: さくらマート 会員データ（合成）
+  // ============================================================
+  {
+    dataset_id: "EXT-DS007",
+    name: "さくらマート 会員データ（合成）",
+    owner_user_id: "external_provider",
+    is_published: true,
+    source: "external",
+    provider: "さくらマートホールディングス株式会社",
+    price_info: "データ共有提携（非売品）",
+    description: "提携先スーパーマーケット「さくらマート」の会員データ。個人情報を含むため、合成データ化してから分析に利用する。年齢・性別・居住地域・来店頻度・累計購買金額などの属性を含み、顧客セグメント分析やマーケティング施策の検討に活用可能。",
+    tags: ["提携", "会員", "スーパーマーケット", "PII"],
+    created_at: "2025-03-15T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/EXT-DS007/member_master.csv", created_at: "2025-03-15T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/EXT-DS007/member_master_seed42.csv", seed: 42, created_at: "2025-03-20T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.93,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 25000, row_count_synthetic: 25000, column_correlation: 0.94, distribution_similarity: 0.92, statistical_parity: 0.93 },
+      ],
+    },
+    catalog: [
+      { column_name: "member_id", inferred_type: "string", is_pii: true, pii_reason: "会員ID", description: "会員を一意に識別するID", stats: { count: 25000, null_count: 0, unique_count: 25000 } },
+      { column_name: "name", inferred_type: "string", is_pii: true, pii_reason: "氏名", description: "会員氏名", stats: { count: 25000, null_count: 0, unique_count: 24800 } },
+      { column_name: "age", inferred_type: "integer", is_pii: false, pii_reason: null, description: "年齢", stats: { count: 25000, null_count: 0, unique_count: 72, min: 18, max: 89, mean: 45.2, std: 15.8, histogram: { bins: ["18-25", "25-35", "35-45", "45-55", "55-65", "65-75", "75-89"], counts: [2500, 4200, 5100, 4800, 4000, 2800, 1600] } } },
+      { column_name: "gender", inferred_type: "string", is_pii: false, pii_reason: null, description: "性別", stats: { count: 25000, null_count: 0, unique_count: 3 } },
+      { column_name: "postal_code", inferred_type: "string", is_pii: true, pii_reason: "郵便番号", description: "会員の郵便番号", stats: { count: 25000, null_count: 0, unique_count: 3200 } },
+      { column_name: "prefecture", inferred_type: "string", is_pii: false, pii_reason: null, description: "居住都道府県", stats: { count: 25000, null_count: 0, unique_count: 15 } },
+      { column_name: "registration_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "会員登録日", stats: { count: 25000, null_count: 0, unique_count: 2800, min: "2010-04-01", max: "2025-03-01" } },
+      { column_name: "membership_rank", inferred_type: "string", is_pii: false, pii_reason: null, description: "会員ランク（レギュラー/シルバー/ゴールド/プラチナ）", stats: { count: 25000, null_count: 0, unique_count: 4 } },
+      { column_name: "total_purchase_amount", inferred_type: "integer", is_pii: false, pii_reason: null, description: "累計購買金額(円)", stats: { count: 25000, null_count: 0, unique_count: 20000, min: 500, max: 3500000, mean: 285000, std: 320000, histogram: { bins: ["0-50000", "50000-100000", "100000-300000", "300000-500000", "500000-1000000", "1000000+"], counts: [3500, 4200, 8500, 4800, 2500, 1500] } } },
+      { column_name: "visit_frequency_monthly", inferred_type: "number", is_pii: false, pii_reason: null, description: "月間来店回数", stats: { count: 25000, null_count: 0, unique_count: 200, min: 0.5, max: 25, mean: 6.8, std: 4.2, histogram: { bins: ["0-2", "2-5", "5-10", "10-15", "15-25"], counts: [2000, 6500, 9000, 5000, 2500] } } },
+      { column_name: "last_visit_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "最終来店日", stats: { count: 25000, null_count: 0, unique_count: 365, min: "2024-01-15", max: "2025-03-14" } },
+      { column_name: "is_active", inferred_type: "boolean", is_pii: false, pii_reason: null, description: "アクティブフラグ", stats: { count: 25000, null_count: 0, unique_count: 2 } },
+    ],
+  },
+  // ============================================================
+  // EXT-DS008: さくらマート 店舗別売上データ（合成）
+  // ============================================================
+  {
+    dataset_id: "EXT-DS008",
+    name: "さくらマート 店舗別売上データ（合成）",
+    owner_user_id: "external_provider",
+    is_published: true,
+    source: "external",
+    provider: "さくらマートホールディングス株式会社",
+    price_info: "データ共有提携（非売品）",
+    description: "提携先「さくらマート」の関東圏45店舗における日次売上データ。カテゴリ別売上・客数・客単価を含み、店舗パフォーマンス分析や需要予測モデルの構築に活用可能。合成データ化により安全にデータ分析が可能。",
+    tags: ["提携", "売上", "店舗", "スーパーマーケット"],
+    created_at: "2025-03-15T09:00:00Z",
+    files: [
+      { file_type: "employee_master", file_path: "data/EXT-DS008/store_daily_sales.csv", created_at: "2025-03-15T09:00:00Z" },
+    ],
+    synthetic_artifacts: [
+      { file_type: "employee_master", file_path: "synthetic/EXT-DS008/store_daily_sales_seed42.csv", seed: 42, created_at: "2025-03-20T10:00:00Z" },
+    ],
+    quality_report: {
+      overall_score: 0.91,
+      file_reports: [
+        { file_type: "employee_master", row_count_original: 16425, row_count_synthetic: 16425, column_correlation: 0.92, distribution_similarity: 0.90, statistical_parity: 0.91 },
+      ],
+    },
+    catalog: [
+      { column_name: "store_id", inferred_type: "string", is_pii: false, pii_reason: null, description: "店舗ID", stats: { count: 16425, null_count: 0, unique_count: 45 } },
+      { column_name: "store_name", inferred_type: "string", is_pii: false, pii_reason: null, description: "店舗名", stats: { count: 16425, null_count: 0, unique_count: 45 } },
+      { column_name: "sales_date", inferred_type: "date", is_pii: false, pii_reason: null, description: "売上日", stats: { count: 16425, null_count: 0, unique_count: 365, min: "2024-04-01", max: "2025-03-31" } },
+      { column_name: "total_sales", inferred_type: "integer", is_pii: false, pii_reason: null, description: "売上合計(円)", stats: { count: 16425, null_count: 0, unique_count: 16000, min: 450000, max: 8500000, mean: 2850000, std: 1200000, histogram: { bins: ["0-1M", "1M-2M", "2M-3M", "3M-5M", "5M+"], counts: [1200, 3800, 5500, 4200, 1725] } } },
+      { column_name: "customer_count", inferred_type: "integer", is_pii: false, pii_reason: null, description: "来客数", stats: { count: 16425, null_count: 0, unique_count: 3000, min: 150, max: 3500, mean: 1200, std: 520, histogram: { bins: ["0-500", "500-1000", "1000-1500", "1500-2000", "2000+"], counts: [1500, 4000, 5500, 3500, 1925] } } },
+      { column_name: "avg_basket_size", inferred_type: "integer", is_pii: false, pii_reason: null, description: "客単価(円)", stats: { count: 16425, null_count: 0, unique_count: 2500, min: 1200, max: 4500, mean: 2375, std: 480, histogram: { bins: ["1000-1500", "1500-2000", "2000-2500", "2500-3000", "3000+"], counts: [1200, 3500, 5800, 4000, 1925] } } },
+      { column_name: "grocery_sales", inferred_type: "integer", is_pii: false, pii_reason: null, description: "食料品売上(円)", stats: { count: 16425, null_count: 0, unique_count: 15000, min: 200000, max: 5000000, mean: 1650000, std: 720000 } },
+      { column_name: "daily_goods_sales", inferred_type: "integer", is_pii: false, pii_reason: null, description: "日用品売上(円)", stats: { count: 16425, null_count: 0, unique_count: 12000, min: 50000, max: 1500000, mean: 480000, std: 210000 } },
+      { column_name: "fresh_food_sales", inferred_type: "integer", is_pii: false, pii_reason: null, description: "生鮮食品売上(円)", stats: { count: 16425, null_count: 0, unique_count: 14000, min: 100000, max: 2500000, mean: 720000, std: 380000 } },
+      { column_name: "day_of_week", inferred_type: "string", is_pii: false, pii_reason: null, description: "曜日", stats: { count: 16425, null_count: 0, unique_count: 7 } },
+    ],
+  },
 ];
